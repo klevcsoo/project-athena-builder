@@ -1,15 +1,14 @@
 import {useCallback, useEffect, useMemo, useState} from "react";
 import {Entity} from "../lib/Entity";
+import {Coords} from "../lib/Coords";
+import {CoordinatesString} from "../lib/CoordinatesString";
 
-type CoordinateString = `${number};${number}`
+const entities: Map<CoordinatesString, Entity> = new Map();
 
-const entities: Map<CoordinateString, Entity> = new Map();
-
-export function useWorldEntity(coords: { x: number; y: number }): {
-    entity: Entity | undefined
-    placeEntity(e: Entity): void
-} {
-    const coordsString = useMemo<CoordinateString>(() => {
+export function useWorldEntity(coords: { x: number; y: number }): [
+        Entity | undefined, (e: Entity) => void
+] {
+    const coordsString = useMemo<CoordinatesString>(() => {
         return `${coords.x};${coords.y}`;
     }, [coords]);
 
@@ -27,8 +26,9 @@ export function useWorldEntity(coords: { x: number; y: number }): {
         else entities.set(coordsString, entity);
     }, [entity, coordsString]);
 
-    return {
-        entity: entity,
-        placeEntity: place
-    };
+    return [entity, place];
+}
+
+export function getEntityAt(c: Coords): Entity | undefined {
+    return entities.get(c.toString());
 }

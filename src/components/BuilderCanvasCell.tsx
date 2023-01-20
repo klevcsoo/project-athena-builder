@@ -7,15 +7,18 @@ import {SpawnToolShell} from "./spawn/SpawnToolShell";
 import {PlatformWorldObject} from "./platform/PlatformWorldObject";
 import {cnx} from "../core/util";
 import {PlatformEntity} from "../lib/PlatformEntity";
+import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
+import {Coords} from "../lib/Coords";
 
 export function BuilderCanvasCell(props: {
     x: number
     y: number
 }) {
     const [activeTool] = useActiveTool();
+    const [_, setSelectedCoords] = useSelectedEntityCoords();
     const [hovering, setHovering] = useState(false);
 
-    const {entity, placeEntity} = useWorldEntity(props);
+    const [entity, setEntity] = useWorldEntity(props);
 
     const toolShell = useMemo<ReactNode>(() => {
         switch (activeTool) {
@@ -42,10 +45,12 @@ export function BuilderCanvasCell(props: {
     }, [entity]);
 
     const useTool = useCallback(() => {
+        setSelectedCoords(new Coords(props.x, props.y));
+
         if (activeTool === "platform") {
-            placeEntity(new PlatformEntity(props.x, props.y));
+            setEntity(new PlatformEntity(props.x, props.y));
         }
-    }, [activeTool, placeEntity]);
+    }, [activeTool, setEntity, setSelectedCoords, props]);
 
     return (
         <div className={cnx(
