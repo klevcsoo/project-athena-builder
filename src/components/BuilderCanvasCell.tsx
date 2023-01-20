@@ -10,10 +10,7 @@ import {PlatformEntity} from "../lib/PlatformEntity";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
 import {Coords} from "../lib/Coords";
 
-export function BuilderCanvasCell(props: {
-    x: number
-    y: number
-}) {
+export function BuilderCanvasCell(props: Coords) {
     const [activeTool] = useActiveTool();
     const [_, setSelectedCoords] = useSelectedEntityCoords();
     const [hovering, setHovering] = useState(false);
@@ -48,7 +45,7 @@ export function BuilderCanvasCell(props: {
         setSelectedCoords(new Coords(props.x, props.y));
 
         if (activeTool === "platform") {
-            setEntity(new PlatformEntity(props.x, props.y));
+            setEntity(new PlatformEntity(props));
         }
     }, [activeTool, setEntity, setSelectedCoords, props]);
 

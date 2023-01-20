@@ -1,4 +1,5 @@
 import {Entity} from "./Entity";
+import {Coords} from "./Coords";
 
 type OrientationV = "north" | "south"
 type OrientationH = "west" | "east"
@@ -8,7 +9,7 @@ export class PlatformEntity extends Entity {
         `${OrientationV}${OrientationH}` | OrientationV | OrientationH
         = "south";
 
-    public constructor(positionX: number, positionY: number) {
-        super(positionX, positionY, "platform", "platform");
+    public constructor(coordinates: Coords) {
+        super(coordinates, "platform", "platform");
     }
 }

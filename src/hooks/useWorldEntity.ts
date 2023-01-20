@@ -5,7 +5,7 @@ import {CoordinatesString} from "../lib/CoordinatesString";
 
 const entities: Map<CoordinatesString, Entity> = new Map();
 
-export function useWorldEntity(coords: { x: number; y: number }): [
+export function useWorldEntity(coords: Coords): [
         Entity | undefined, (e: Entity) => void
 ] {
     const coordsString = useMemo<CoordinatesString>(() => {

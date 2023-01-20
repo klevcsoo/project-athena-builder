@@ -1,7 +1,8 @@
+import {Coords} from "./Coords";
+
 export abstract class Entity {
     protected constructor(
-        public readonly positionX: number,
-        public readonly positionY: number,
+        public readonly position: Coords,
         public name: string,
         public entityType: "platform" | "spawn"
     ) {
