@@ -22,7 +22,6 @@ export function useWorldEntity(coords: { x: number; y: number }): {
     }, []);
 
     useEffect(() => {
-        console.log("updated entity:", entity, "at", coordsString);
         if (!entity) entities.delete(coordsString);
         else entities.set(coordsString, entity);
     }, [entity, coordsString]);
