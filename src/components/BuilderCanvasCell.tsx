@@ -9,6 +9,8 @@ import {cnx} from "../core/util";
 import {PlatformEntity} from "../lib/PlatformEntity";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
 import {Coords} from "../lib/Coords";
+import {SpawnWorldObject} from "./spawn/SpawnWorldObject";
+import {SpawnEntity} from "../lib/SpawnEntity";
 
 export function BuilderCanvasCell(props: {
     coords: Coords
@@ -39,6 +41,10 @@ export function BuilderCanvasCell(props: {
                 return <PlatformWorldObject orientation={
                     (entity as PlatformEntity).orientation
                 }/>;
+            case "spawn":
+                return <SpawnWorldObject character={
+                    (entity as SpawnEntity).character
+                }/>;
             default:
                 return null;
         }
@@ -50,6 +56,20 @@ export function BuilderCanvasCell(props: {
         if (activeTool === "platform") {
             setEntity(new PlatformEntity(props.coords));
         }
+
+        switch (activeTool) {
+            case "platform": {
+                setEntity(new PlatformEntity(props.coords));
+                break;
+            }
+            case "spawn": {
+                setEntity(new SpawnEntity(props.coords));
+                break;
+            }
+            default: {
+                break;
+            }
+        }
     }, [activeTool, setEntity, setSelectedCoords, props.coords]);
 
     return (
@@ -58,7 +78,7 @@ export function BuilderCanvasCell(props: {
             "border", "border-dashed", "border-white",
             "border-opacity-10",
             selectedCoords.toString() === props.coords.toString() ?
-                "animate-pulse" : ""
+                cnx("animate-pulse", "border-opacity-100") : ""
         )} onMouseEnter={() => {
             setHovering(true);
         }} onMouseLeave={() => {

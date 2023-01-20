@@ -7,6 +7,7 @@ import {TextInput} from "../components/ui/TextInput";
 import {PlatformEntity, PlatformEntityOrientation} from "../lib/PlatformEntity";
 import {DropdownInput} from "../components/ui/DropdownInput";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
+import {SpawnEntity} from "../lib/SpawnEntity";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();
@@ -37,6 +38,11 @@ export function EntityDetailsLayout() {
             {entity.entityType === "platform" ? (
                 <Fragment>
                     <PlatformOrientationEditor {...entity as PlatformEntity}/>
+                </Fragment>
+            ) : null}
+            {entity.entityType === "spawn" ? (
+                <Fragment>
+                    <SpawnPointCharacterEditor {...entity as SpawnEntity}/>
                 </Fragment>
             ) : null}
         </div>
@@ -117,13 +123,45 @@ function PlatformOrientationEditor(props: PlatformEntity) {
             "bg-neutral-900", "rounded-md"
         )}>
             <MaterialSymbol name={"view_in_ar"}/>
-            <DropdownInput options={options}
-                           selected={selected} onSelected={value => {
-                setSelected(value);
-                updateEntityAt<PlatformEntity>(props.position, {
-                    orientation: value as PlatformEntityOrientation
-                });
-            }}/>
+            <DropdownInput
+                options={options}
+                selected={selected}
+                onSelected={value => {
+                    setSelected(value);
+                    updateEntityAt<PlatformEntity>(props.position, {
+                        orientation: value as PlatformEntityOrientation
+                    });
+                }}/>
+        </div>
+    );
+}
+
+function SpawnPointCharacterEditor(props: SpawnEntity) {
+    const options = useMemo<["anna", "ben"]>(() => {
+        return ["anna", "ben"];
+    }, []);
+    const [selected, setSelected] = useState<"anna" | "ben">(props.character);
+
+    useEffect(() => {
+        setSelected(props.character);
+    }, [props.character]);
+
+    return (
+        <div className={cnx(
+            "h-10", "w-full", "px-4",
+            "flex", "flex-row", "gap-4", "items-center", "justify-between",
+            "bg-neutral-900", "rounded-md"
+        )}>
+            <MaterialSymbol name={"person"}/>
+            <DropdownInput
+                options={options}
+                selected={selected}
+                onSelected={value => {
+                    setSelected(value as any);
+                    updateEntityAt<SpawnEntity>(props.position, {
+                        character: value as any
+                    });
+                }}/>
         </div>
     );
 }
