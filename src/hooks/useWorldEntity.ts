@@ -2,47 +2,38 @@ import {useCallback, useEffect, useState} from "react";
 import {Entity} from "../lib/Entity";
 import {Coords} from "../lib/Coords";
 import {CoordinatesString} from "../lib/CoordinatesString";
+import {PubSubMapEventHandler} from "../lib/PubSubMapEventHandler";
 
-const entities: Map<CoordinatesString, Entity> = new Map();
-(window as any)["displayEntities"] = () => {
-    console.dir(entities.entries());
-};
+const pubsub = new PubSubMapEventHandler<CoordinatesString, Entity>();
 
 export function useWorldEntity(coords: Coords): [
         Entity | undefined, (e: Entity) => void
 ] {
     const [entity, setEntity] = useState<Entity | undefined>(
-        entities.has(coords.toString()) ? entities.get(coords.toString()) : undefined
+        pubsub.get(coords.toString())
     );
 
     const place = useCallback((e: Entity) => {
-        if (entities.has(coords.toString())) {
-            entities.delete(coords.toString());
+        if (pubsub.has(coords.toString())) {
+            pubsub.delete(coords.toString());
         } else {
-            entities.set(coords.toString(), e);
+            pubsub.set(coords.toString(), e);
         }
     }, [coords]);
 
     useEffect(() => {
-        if (!entity) entities.delete(coords.toString());
-        else entities.set(coords.toString(), entity);
-    }, [entity, coords]);
-
-    useEffect(() => {
-        const id = setInterval(() => {
-            setEntity(entities.get(coords.toString()));
-        }, 100);
-
-        return () => clearInterval(id);
+        const callback = (e: Entity | undefined) => setEntity(e);
+        pubsub.on(coords.toString(), callback);
+        return () => pubsub.off(coords.toString(), callback);
     }, [coords]);
 
     return [entity, place];
 }
 
 export function getEntityAt(c: Coords): Entity | undefined {
-    return entities.get(c.toString());
+    return pubsub.get(c.toString());
 }
 
 export function updateEntityAt<T extends Entity>(c: Coords, properties: Partial<T>) {
-    entities.set(c.toString(), {...entities.get(c.toString())!, ...properties});
+    pubsub.set(c.toString(), {...pubsub.get(c.toString())!, ...properties});
 }

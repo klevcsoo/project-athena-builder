@@ -1,39 +1,38 @@
 import {ToolboxTool} from "../lib/ToolboxTool";
 import {useCallback, useEffect, useState} from "react";
+import {PubSubEventHandler} from "../lib/PubSubEventHandler";
 
-const LS_KEY = "toolbox.active_tool";
-const toolboxKeyMap: Map<string, ToolboxTool> = new Map([
-    ["KeyV", "pointer"],
-    ["KeyP", "platform"]
-]);
+const pubsub = new PubSubEventHandler<ToolboxTool>("pointer");
 
 // Initialize toolbox shortcuts
 // Refuses to work if I don't put the in an
 // anonymous function for some reason
 (() => {
+    const toolboxKeyMap: Map<string, ToolboxTool> = new Map([
+        ["KeyV", "pointer"],
+        ["KeyP", "platform"]
+    ]);
+
     window.addEventListener("keypress", ({code}) => {
         if (toolboxKeyMap.has(code)) {
-            localStorage.setItem(LS_KEY, toolboxKeyMap.get(code)!);
+            pubsub.update(toolboxKeyMap.get(code)!);
         }
     });
 })();
 
 export function useActiveTool(): [ToolboxTool, (tool: ToolboxTool) => void] {
-    const [tool, setTool] = useState<ToolboxTool>(localStorage.getItem(LS_KEY) as any);
-
-    // Not exactly an elegant solution, but refuses to work if
-    // I leave the checking to React
-    useEffect(() => {
-        const id = setInterval(() => {
-            setTool(localStorage.getItem(LS_KEY) as any);
-        }, 100);
-
-        return () => clearInterval(id);
-    }, []);
+    const [tool, setTool] = useState<ToolboxTool>(pubsub.get());
 
     const set = useCallback((newTool: ToolboxTool) => {
-        localStorage.setItem(LS_KEY, newTool);
+        pubsub.update(newTool);
     }, []);
+
+    useEffect(() => {
+        const callback = (t: ToolboxTool) => setTool(t);
+        pubsub.on(callback);
+        return () => pubsub.off(callback);
+    }, []);
+
 
     return [tool, set];
 }

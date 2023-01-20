@@ -1,28 +1,20 @@
 import {useCallback, useEffect, useState} from "react";
 import {Coords} from "../lib/Coords";
+import {PubSubEventHandler} from "../lib/PubSubEventHandler";
 
-const LS_KEY = "entity_details.selected";
+const pubsub = new PubSubEventHandler(new Coords(0, 0));
 
 export function useSelectedEntityCoords(): [Coords, (c: Coords) => void] {
-    const [coords, setCoords] = useState<Coords>(new Coords(0, 0));
+    const [coords, setCoords] = useState<Coords>(pubsub.get());
 
     const set = useCallback((c: Coords) => {
-        localStorage.setItem(LS_KEY, `${c}`);
+        pubsub.update(c);
     }, []);
 
     useEffect(() => {
-        if (!localStorage.getItem(LS_KEY)) {
-            localStorage.setItem(LS_KEY, `0;0`);
-        }
-
-        const id = setInterval(() => {
-            const raw = localStorage.getItem(LS_KEY) as any as string;
-            setCoords(new Coords(
-                parseInt(raw.split(";")[0]), parseInt(raw.split(";")[1])
-            ));
-        }, 100);
-
-        return () => clearInterval(id);
+        const callback = (c: Coords) => setCoords(c);
+        pubsub.on(callback);
+        return () => pubsub.off(callback);
     }, []);
 
     return [coords, set];
