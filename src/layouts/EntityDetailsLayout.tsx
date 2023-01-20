@@ -106,6 +106,10 @@ function PlatformOrientationEditor(props: PlatformEntity) {
     }, []);
     const [selected, setSelected] = useState<string>(props.orientation);
 
+    useEffect(() => {
+        setSelected(props.orientation);
+    }, [props.orientation]);
+
     return (
         <div className={cnx(
             "h-10", "w-full", "px-4",
