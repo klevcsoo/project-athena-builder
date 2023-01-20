@@ -10,7 +10,7 @@ export function SpawnToolShell() {
             "border-2", "border-white"
         )}>
             <MaterialSymbol name={"person_pin_circle"} className={cnx(
-                "text-white", "text-3xl"
+                "text-white", "text-3xl", "animate-breathe"
             )}/>
         </div>
     );
