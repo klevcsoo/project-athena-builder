@@ -14,9 +14,8 @@ export function BuilderCanvasCell(props: {
     coords: Coords
 }) {
     const [activeTool] = useActiveTool();
-    const [_, setSelectedCoords] = useSelectedEntityCoords();
+    const [selectedCoords, setSelectedCoords] = useSelectedEntityCoords();
     const [hovering, setHovering] = useState(false);
-
     const [entity, setEntity] = useWorldEntity(props.coords);
 
     const toolShell = useMemo<ReactNode>(() => {
@@ -37,7 +36,9 @@ export function BuilderCanvasCell(props: {
     const entityObject = useMemo<ReactNode>(() => {
         switch (entity?.entityType) {
             case "platform":
-                return <PlatformWorldObject/>;
+                return <PlatformWorldObject orientation={
+                    (entity as PlatformEntity).orientation
+                }/>;
             default:
                 return null;
         }
@@ -55,7 +56,9 @@ export function BuilderCanvasCell(props: {
         <div className={cnx(
             "relative", "w-full", "h-full",
             "border", "border-dashed", "border-white",
-            "border-opacity-10"
+            "border-opacity-10",
+            selectedCoords.toString() === props.coords.toString() ?
+                "animate-pulse" : ""
         )} onMouseEnter={() => {
             setHovering(true);
         }} onMouseLeave={() => {
