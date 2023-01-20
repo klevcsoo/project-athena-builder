@@ -1,4 +1,5 @@
 import {cnx} from "../../core/util";
+import {MaterialSymbol} from "../ui/MaterialSymbol";
 
 export function SpawnToolShell() {
     return (
@@ -8,11 +9,9 @@ export function SpawnToolShell() {
             "grid", "place-content-center",
             "border-2", "border-white"
         )}>
-            <span className={cnx(
-                "material-symbols-rounded",
-                "text-white", "text-3xl",
-                "animate-ping"
-            )}>person_pin_circle</span>
+            <MaterialSymbol name={"person_pin_circle"} className={cnx(
+                "text-white", "text-3xl"
+            )}/>
         </div>
     );
 }

@@ -2,6 +2,7 @@ import {cnx} from "../core/util";
 import {useActiveTool} from "../hooks/useActiveTool";
 import {ToolboxTool} from "../lib/ToolboxTool";
 import {useMemo} from "react";
+import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 
 const toolIconMap: { [key in ToolboxTool]: string } = {
     pointer: "arrow_selector_tool",
@@ -43,14 +44,11 @@ function ToolboxButton(props: {
                 "hover:bg-neutral-100"
             ) : ""
         )} onClick={() => setTool(props.tool)}>
-            <span className={cnx(
-                "material-symbols-rounded",
+            <MaterialSymbol name={toolIconMap[props.tool]} className={cnx(
                 "text-white",
                 "group-hover:text-blue-400",
                 isActive ? "text-black" : ""
-            )}>
-                {toolIconMap[props.tool]}
-            </span>
+            )}/>
         </button>
     );
 }

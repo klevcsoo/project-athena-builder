@@ -6,6 +6,7 @@ import {Entity} from "../lib/Entity";
 import {TextInput} from "../components/ui/TextInput";
 import {PlatformEntity} from "../lib/PlatformEntity";
 import {DropdownInput} from "../components/ui/DropdownInput";
+import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();
@@ -62,9 +63,7 @@ function EntityCoordinates(props: Entity) {
             "flex", "flex-row", "gap-4", "items-center", "justify-between",
             "bg-neutral-900", "rounded-md"
         )}>
-            <span className="material-symbols-rounded">
-                my_location
-            </span>
+            <MaterialSymbol name={"my_location"}/>
             <div className={cnx(
                 "flex", "flex-row", "gap-4", "items-center", "justify-end"
             )}>
@@ -116,9 +115,7 @@ function PlatformOrientationEditor(props: PlatformEntity) {
             "flex", "flex-row", "gap-4", "items-center", "justify-between",
             "bg-neutral-900", "rounded-md"
         )}>
-            <span className="material-symbols-rounded">
-                view_in_ar
-            </span>
+            <MaterialSymbol name={"view_in_ar"}/>
             <DropdownInput options={options}
                            selected={selected} onSelected={setSelected}/>
         </div>
