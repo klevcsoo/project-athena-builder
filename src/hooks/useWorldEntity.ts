@@ -12,7 +12,9 @@ export function useWorldEntity(coords: Coords): [
 
     const place = useCallback((e: Entity) => {
         if (entityMap.has(coords.toString())) {
-            entityMap.delete(coords.toString());
+            if (entityMap.get(coords.toString())!.entityType !== e.entityType) {
+                entityMap.set(coords.toString(), e);
+            }
         } else {
             entityMap.set(coords.toString(), e);
         }

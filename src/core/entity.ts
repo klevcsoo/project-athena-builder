@@ -12,3 +12,7 @@ export function getEntityAt(c: Coords): Entity | undefined {
 export function updateEntityAt<T extends Entity>(c: Coords, properties: Partial<T>) {
     entityMap.set(c.toString(), {...entityMap.get(c.toString())!, ...properties});
 }
+
+export function destroyEntityAt(c: Coords) {
+    entityMap.delete(c.toString());
+}

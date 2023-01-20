@@ -1,13 +1,14 @@
 import {cnx} from "../core/util";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
-import {Fragment, useEffect, useMemo, useState} from "react";
+import {Fragment, useCallback, useEffect, useMemo, useState} from "react";
 import {Entity} from "../lib/Entity";
 import {TextInput} from "../components/ui/TextInput";
 import {PlatformEntity, PlatformEntityOrientation} from "../lib/PlatformEntity";
 import {DropdownInput} from "../components/ui/DropdownInput";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 import {SpawnEntity} from "../lib/SpawnEntity";
-import {getEntityAt, updateEntityAt} from "../core/entity";
+import {destroyEntityAt, getEntityAt, updateEntityAt} from "../core/entity";
+import {BasicButton} from "../components/ui/BasicButton";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();
@@ -26,7 +27,7 @@ export function EntityDetailsLayout() {
 
     return !entity ? null : (
         <div className={cnx(
-            "absolute", "top-4", "bottom-4", "right-4", "z-10",
+            "absolute", "top-4", "bottom-4", "right-4", "z-30",
             "max-w-xs", "w-full", "p-4",
             "bg-[#00000060]", "backdrop-blur-lg", "rounded-xl",
             "flex", "flex-col", "items-center", "gap-4",
@@ -45,6 +46,9 @@ export function EntityDetailsLayout() {
                     <SpawnPointCharacterEditor {...entity as SpawnEntity}/>
                 </Fragment>
             ) : null}
+            <DeleteEntityButton entity={entity} onDelete={() => {
+                setEntity(undefined);
+            }}/>
         </div>
     );
 }
@@ -163,5 +167,19 @@ function SpawnPointCharacterEditor(props: SpawnEntity) {
                     });
                 }}/>
         </div>
+    );
+}
+
+function DeleteEntityButton(props: {
+    entity: Entity,
+    onDelete(): void
+}) {
+    const doDelete = useCallback(() => {
+        destroyEntityAt(props.entity.position);
+        props.onDelete();
+    }, [props]);
+
+    return (
+        <BasicButton text={"Delete entity"} onClick={doDelete} warning/>
     );
 }
