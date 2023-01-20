@@ -20,9 +20,12 @@ export function clamp(n: number, min: number, max: number): number {
     return Math.min(Math.max(n, min), max);
 }
 
-export function isDevEnv() {
-    return (
-        window.location.hostname === "localhost" ||
-        window.location.hostname.endsWith("devtunnels.ms")
-    );
+/**
+ * Emulates a thread-halting sleep function.
+ * @param milliseconds amount of milliseconds to halt execution for
+ */
+export async function sleep(milliseconds: number) {
+    return new Promise<void>(resolve => {
+        setTimeout(() => resolve(), milliseconds);
+    });
 }

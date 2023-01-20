@@ -44,11 +44,15 @@ export class PubSubMapEventHandler<K, V> {
     }
 
     public delete(key: K) {
-        this.map.delete(key)
+        this.map.delete(key);
         if (this.listeners.has(key)) {
             for (const callback of this.listeners.get(key)!) {
                 callback(undefined);
             }
         }
+    }
+
+    public values() {
+        return this.map.values();
     }
 }
