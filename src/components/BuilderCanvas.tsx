@@ -21,7 +21,7 @@ export function BuilderCanvas() {
 
     const [dragging, setDragging] = useState(false);
 
-    const beginDrag = useCallback<MouseEventHandler<HTMLDivElement>>(event => {
+    const beginDrag = useCallback<MouseEventHandler<HTMLTableElement>>(event => {
         setStartX(event.clientX);
         setStartY(event.clientY);
         setOffsetX(event.currentTarget.offsetLeft);
@@ -29,11 +29,11 @@ export function BuilderCanvas() {
         setDragging(true);
     }, []);
 
-    const endDrag = useCallback<MouseEventHandler<HTMLDivElement>>(() => {
+    const endDrag = useCallback<MouseEventHandler<HTMLTableElement>>(() => {
         setDragging(false);
     }, []);
 
-    const updateDrag = useCallback<MouseEventHandler<HTMLDivElement>>(event => {
+    const updateDrag = useCallback<MouseEventHandler<HTMLTableElement>>(event => {
         if (!dragging) return;
 
         const elem = event.currentTarget;
@@ -46,42 +46,41 @@ export function BuilderCanvas() {
     }, [dragging, startX, startY, offsetX, offsetY]);
 
     return (
-        <div className={cnx(
-            "absolute", "grid",
+        <table width={CANVAS_REAL_WIDTH} style={{
+            height: CANVAS_REAL_HEIGHT,
+            left: `${-(CANVAS_REAL_WIDTH / 2) + window.innerWidth / 2}px`,
+            top: `${-(CANVAS_REAL_HEIGHT / 2) + window.innerHeight / 2}px`,
+        }} className={cnx(
+            "absolute", "table-fixed",
             "bg-slate-900", dragging ? "cursor-move" : "cursor-default",
             "border-2", "border-slate-600"
-        )} style={{
-            width: `${CANVAS_REAL_WIDTH}px`,
-            height: `${CANVAS_REAL_HEIGHT}px`,
-            left: `${-(CANVAS_REAL_WIDTH / 2) + window.innerWidth / 2}px`,
-            top: `${-(CANVAS_REAL_HEIGHT / 2) + window.innerHeight / 2}`,
-            transform: `scale(1)`,
-            gridTemplateColumns: `repeat(${CANVAS_VIRTUAL_WIDTH}, minmax(0, 1fr))`,
-            gridTemplateRows: `repeat(${CANVAS_VIRTUAL_HEIGHT}, minmax(0, 1fr))`
-        }} onMouseDown={beginDrag} onMouseUp={endDrag} onMouseMove={updateDrag}
-             onMouseLeave={endDrag}>
-            {[...new Array(CANVAS_VIRTUAL_WIDTH * CANVAS_VIRTUAL_HEIGHT)]
-                .map((_, index) => (
-                    <BuilderCanvasCell key={index} index={index}/>
-                ))
-            }
-        </div>
+        )} onMouseDown={beginDrag} onMouseUp={endDrag} onMouseMove={updateDrag}
+               onMouseLeave={endDrag}>
+            <tbody className={cnx("border-collapse", "border-spacing-0")}>
+            {[...new Array(CANVAS_VIRTUAL_HEIGHT)].map((_, y) => (
+                <tr>
+                    {[...new Array(CANVAS_VIRTUAL_WIDTH)].map((_, x) => (
+                        <td width={CANVAS_UNIT_SIZE} height={CANVAS_UNIT_SIZE}>
+                            <BuilderCanvasCell x={x - CANVAS_VIRTUAL_WIDTH / 2}
+                                               y={y - CANVAS_VIRTUAL_HEIGHT / 2}
+                                               key={y * CANVAS_VIRTUAL_WIDTH + x}/>
+                        </td>
+                    ))}
+                </tr>
+            ))}
+            </tbody>
+        </table>
     );
 }
 
 function BuilderCanvasCell(props: {
-    index: number
+    x: number
+    y: number
 }) {
     const [activeTool] = useActiveTool();
     const [hovering, setHovering] = useState(false);
 
-    const coords = useMemo<{ x: number, y: number }>(() => {
-        const y = Math.floor(props.index / CANVAS_VIRTUAL_WIDTH);
-        const x = props.index - y * CANVAS_VIRTUAL_WIDTH;
-        return {x: x, y: y};
-    }, [props.index]);
-
-    const {entity, placeEntity} = useWorldEntity(coords);
+    const {entity, placeEntity} = useWorldEntity(props);
 
     const toolShell = useMemo<ReactNode>(() => {
         switch (activeTool) {
@@ -114,8 +113,8 @@ function BuilderCanvasCell(props: {
     }, [activeTool, placeEntity]);
 
     return (
-        <div key={props.index} className={cnx(
-            "relative",
+        <div className={cnx(
+            "relative", "w-full", "h-full",
             "border", "border-dashed", "border-white",
             "border-opacity-10"
         )} onMouseEnter={() => {
@@ -125,7 +124,7 @@ function BuilderCanvasCell(props: {
         }} onClick={useTool}>
             <p className={cnx(
                 "text-white", "text-sm", "text-opacity-10"
-            )}>{coords.x}; {coords.y}            </p>
+            )}>{props.x}; {props.y}            </p>
             {hovering ? toolShell : null}
             {entityObject}
         </div>
