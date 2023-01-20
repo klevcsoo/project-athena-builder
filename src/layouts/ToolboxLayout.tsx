@@ -13,7 +13,7 @@ const toolIconMap: { [key in ToolboxTool]: string } = {
 export function ToolboxLayout() {
     return (
         <div className={cnx(
-            "absolute", "inset-4", "z-10",
+            "absolute", "inset-4", "z-30",
             "w-16", "p-2",
             "bg-[#00000060]", "backdrop-blur-lg", "rounded-xl",
             "flex", "flex-col", "items-center", "gap-2"
