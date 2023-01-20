@@ -1,10 +1,10 @@
 import {cnx} from "../core/util";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
-import {getEntityAt} from "../hooks/useWorldEntity";
+import {getEntityAt, updateEntityAt} from "../hooks/useWorldEntity";
 import {Fragment, useEffect, useMemo, useState} from "react";
 import {Entity} from "../lib/Entity";
 import {TextInput} from "../components/ui/TextInput";
-import {PlatformEntity} from "../lib/PlatformEntity";
+import {PlatformEntity, PlatformEntityOrientation} from "../lib/PlatformEntity";
 import {DropdownInput} from "../components/ui/DropdownInput";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 
@@ -52,6 +52,7 @@ function EntityNameEditor(props: Entity) {
 
     return (
         <TextInput text={name} onText={setName} onSubmit={() => {
+            updateEntityAt(props.position, {name: name});
         }} placeholder={"Entity name"}/>
     );
 }
@@ -97,17 +98,13 @@ function EntityCoordinates(props: Entity) {
 }
 
 function PlatformOrientationEditor(props: PlatformEntity) {
-    const options = useMemo<string[]>(() => {
+    const options = useMemo<PlatformEntityOrientation[]>(() => {
         return [
             "north", "south", "west", "east",
             "northwest", "northeast", "southwest", "southeast"
         ];
     }, []);
     const [selected, setSelected] = useState<string>(props.orientation);
-
-    useEffect(() => {
-        console.log(selected);
-    }, [selected]);
 
     return (
         <div className={cnx(
@@ -117,7 +114,12 @@ function PlatformOrientationEditor(props: PlatformEntity) {
         )}>
             <MaterialSymbol name={"view_in_ar"}/>
             <DropdownInput options={options}
-                           selected={selected} onSelected={setSelected}/>
+                           selected={selected} onSelected={value => {
+                setSelected(value);
+                updateEntityAt<PlatformEntity>(props.position, {
+                    orientation: value as PlatformEntityOrientation
+                });
+            }}/>
         </div>
     );
 }

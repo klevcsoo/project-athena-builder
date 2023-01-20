@@ -3,11 +3,11 @@ import {Coords} from "./Coords";
 
 type OrientationV = "north" | "south"
 type OrientationH = "west" | "east"
+export type PlatformEntityOrientation =
+    `${OrientationV}${OrientationH}` | OrientationV | OrientationH
 
 export class PlatformEntity extends Entity {
-    public orientation:
-        `${OrientationV}${OrientationH}` | OrientationV | OrientationH
-        = "south";
+    public orientation: PlatformEntityOrientation = "south";
 
     public constructor(coordinates: Coords) {
         const name = `platform-${Math.floor(Math.random() * 8192).toString(16)}`;
