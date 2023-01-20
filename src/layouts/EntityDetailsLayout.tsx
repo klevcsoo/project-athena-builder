@@ -1,6 +1,5 @@
 import {cnx} from "../core/util";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
-import {getEntityAt, updateEntityAt} from "../hooks/useWorldEntity";
 import {Fragment, useEffect, useMemo, useState} from "react";
 import {Entity} from "../lib/Entity";
 import {TextInput} from "../components/ui/TextInput";
@@ -8,6 +7,7 @@ import {PlatformEntity, PlatformEntityOrientation} from "../lib/PlatformEntity";
 import {DropdownInput} from "../components/ui/DropdownInput";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 import {SpawnEntity} from "../lib/SpawnEntity";
+import {getEntityAt, updateEntityAt} from "../core/entity";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();
