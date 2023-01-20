@@ -1,6 +1,6 @@
 import {cnx} from "../../core/util";
 
-export function PlatformEntity() {
+export function PlatformWorldObject() {
     return (
         <div className={cnx(
             "absolute", "inset-0", "top-2/3",
