@@ -16,7 +16,11 @@ export function useWorldEntity(coords: Coords): [
     );
 
     const place = useCallback((e: Entity) => {
-        entities.set(coords.toString(), e);
+        if (entities.has(coords.toString())) {
+            entities.delete(coords.toString());
+        } else {
+            entities.set(coords.toString(), e);
+        }
     }, [coords]);
 
     useEffect(() => {
