@@ -18,8 +18,9 @@ export function useWorldEntity(coords: { x: number; y: number }): {
     );
 
     const place = useCallback((e: ToolboxTool) => {
-        setEntity(e);
-    }, []);
+        if (entities.has(coordsString)) setEntity(undefined);
+        else setEntity(e);
+    }, [coordsString]);
 
     useEffect(() => {
         if (!entity) entities.delete(coordsString);
