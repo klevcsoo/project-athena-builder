@@ -10,6 +10,7 @@ export class PlatformEntity extends Entity {
         = "south";
 
     public constructor(coordinates: Coords) {
-        super(coordinates, "platform", "platform");
+        const name = `platform-${Math.floor(Math.random() * 8192).toString(16)}`;
+        super(coordinates, name, "platform");
     }
 }
