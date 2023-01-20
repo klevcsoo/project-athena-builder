@@ -21,7 +21,7 @@ export function BuilderCanvas() {
 
     const [dragging, setDragging] = useState(false);
 
-    const mouseDown = useCallback<MouseEventHandler<HTMLDivElement>>(event => {
+    const beginDrag = useCallback<MouseEventHandler<HTMLDivElement>>(event => {
         setStartX(event.clientX);
         setStartY(event.clientY);
         setOffsetX(event.currentTarget.offsetLeft);
@@ -29,11 +29,11 @@ export function BuilderCanvas() {
         setDragging(true);
     }, []);
 
-    const mouseUp = useCallback<MouseEventHandler<HTMLDivElement>>(() => {
+    const endDrag = useCallback<MouseEventHandler<HTMLDivElement>>(() => {
         setDragging(false);
     }, []);
 
-    const mouseMove = useCallback<MouseEventHandler<HTMLDivElement>>(event => {
+    const updateDrag = useCallback<MouseEventHandler<HTMLDivElement>>(event => {
         if (!dragging) return;
 
         const elem = event.currentTarget;
@@ -58,8 +58,8 @@ export function BuilderCanvas() {
             transform: `scale(1)`,
             gridTemplateColumns: `repeat(${CANVAS_VIRTUAL_WIDTH}, minmax(0, 1fr))`,
             gridTemplateRows: `repeat(${CANVAS_VIRTUAL_HEIGHT}, minmax(0, 1fr))`
-        }} onMouseDown={mouseDown} onMouseUp={mouseUp} onMouseMove={mouseMove}
-             onMouseLeave={mouseUp}>
+        }} onMouseDown={beginDrag} onMouseUp={endDrag} onMouseMove={updateDrag}
+             onMouseLeave={endDrag}>
             {[...new Array(CANVAS_VIRTUAL_WIDTH * CANVAS_VIRTUAL_HEIGHT)]
                 .map((_, index) => (
                     <BuilderCanvasCell key={index} index={index}/>
