@@ -10,12 +10,14 @@ import {PlatformEntity} from "../lib/PlatformEntity";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
 import {Coords} from "../lib/Coords";
 
-export function BuilderCanvasCell(props: Coords) {
+export function BuilderCanvasCell(props: {
+    coords: Coords
+}) {
     const [activeTool] = useActiveTool();
     const [_, setSelectedCoords] = useSelectedEntityCoords();
     const [hovering, setHovering] = useState(false);
 
-    const [entity, setEntity] = useWorldEntity(props);
+    const [entity, setEntity] = useWorldEntity(props.coords);
 
     const toolShell = useMemo<ReactNode>(() => {
         switch (activeTool) {
@@ -42,12 +44,12 @@ export function BuilderCanvasCell(props: Coords) {
     }, [entity]);
 
     const useTool = useCallback(() => {
-        setSelectedCoords(new Coords(props.x, props.y));
+        setSelectedCoords(new Coords(props.coords.x, props.coords.y));
 
         if (activeTool === "platform") {
-            setEntity(new PlatformEntity(props));
+            setEntity(new PlatformEntity(props.coords));
         }
-    }, [activeTool, setEntity, setSelectedCoords, props]);
+    }, [activeTool, setEntity, setSelectedCoords, props.coords]);
 
     return (
         <div className={cnx(
@@ -61,7 +63,7 @@ export function BuilderCanvasCell(props: Coords) {
         }} onClick={useTool}>
             <p className={cnx(
                 "text-white", "text-sm", "text-opacity-10"
-            )}>{props.x}; {props.y}            </p>
+            )}>{props.coords.x}; {props.coords.y}            </p>
             {hovering ? toolShell : null}
             {entityObject}
         </div>

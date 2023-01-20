@@ -1,6 +1,7 @@
 import {MouseEventHandler, useCallback, useState} from "react";
 import {clamp, cnx} from "../core/util";
 import {BuilderCanvasCell} from "./BuilderCanvasCell";
+import {Coords} from "../lib/Coords";
 
 const CANVAS_VIRTUAL_WIDTH = 40 as const; // units
 const CANVAS_VIRTUAL_HEIGHT = 20 as const; // units
@@ -53,12 +54,14 @@ export function BuilderCanvas() {
                onMouseLeave={endDrag}>
             <tbody className={cnx("border-collapse", "border-spacing-0")}>
             {[...new Array(CANVAS_VIRTUAL_HEIGHT)].map((_, y) => (
-                <tr>
+                <tr key={y}>
                     {[...new Array(CANVAS_VIRTUAL_WIDTH)].map((_, x) => (
-                        <td width={CANVAS_UNIT_SIZE} height={CANVAS_UNIT_SIZE}>
-                            <BuilderCanvasCell x={x - CANVAS_VIRTUAL_WIDTH / 2}
-                                               y={y - CANVAS_VIRTUAL_HEIGHT / 2}
-                                               key={y * CANVAS_VIRTUAL_WIDTH + x}/>
+                        <td width={CANVAS_UNIT_SIZE} height={CANVAS_UNIT_SIZE}
+                            key={x}>
+                            <BuilderCanvasCell coords={new Coords(
+                                x - CANVAS_VIRTUAL_WIDTH / 2,
+                                y - CANVAS_VIRTUAL_HEIGHT / 2
+                            )}/>
                         </td>
                     ))}
                 </tr>
