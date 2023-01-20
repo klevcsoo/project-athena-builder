@@ -1,23 +1,23 @@
-import {ToolboxTool} from "../lib/ToolboxTool";
 import {useCallback, useEffect, useMemo, useState} from "react";
+import {Entity} from "../lib/Entity";
 
 type CoordinateString = `${number};${number}`
 
-const entities: Map<CoordinateString, ToolboxTool> = new Map();
+const entities: Map<CoordinateString, Entity> = new Map();
 
 export function useWorldEntity(coords: { x: number; y: number }): {
-    entity: ToolboxTool | undefined
-    placeEntity(entityType: ToolboxTool): void
+    entity: Entity | undefined
+    placeEntity(e: Entity): void
 } {
     const coordsString = useMemo<CoordinateString>(() => {
         return `${coords.x};${coords.y}`;
     }, [coords]);
 
-    const [entity, setEntity] = useState<ToolboxTool | undefined>(
+    const [entity, setEntity] = useState<Entity | undefined>(
         entities.has(coordsString) ? entities.get(coordsString) : undefined
     );
 
-    const place = useCallback((e: ToolboxTool) => {
+    const place = useCallback((e: Entity) => {
         if (entities.has(coordsString)) setEntity(undefined);
         else setEntity(e);
     }, [coordsString]);

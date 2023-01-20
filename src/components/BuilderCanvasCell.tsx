@@ -4,8 +4,9 @@ import {useWorldEntity} from "../hooks/useWorldEntity";
 import {PointerToolShell} from "./pointer/PointerToolShell";
 import {PlatformToolShell} from "./platform/PlatformToolShell";
 import {SpawnToolShell} from "./spawn/SpawnToolShell";
-import {PlatformEntity} from "./platform/PlatformEntity";
+import {PlatformWorldObject} from "./platform/PlatformWorldObject";
 import {cnx} from "../core/util";
+import {PlatformEntity} from "../lib/PlatformEntity";
 
 export function BuilderCanvasCell(props: {
     x: number
@@ -32,9 +33,9 @@ export function BuilderCanvasCell(props: {
     }, [activeTool]);
 
     const entityObject = useMemo<ReactNode>(() => {
-        switch (entity) {
+        switch (entity?.entityType) {
             case "platform":
-                return <PlatformEntity/>;
+                return <PlatformWorldObject/>;
             default:
                 return null;
         }
@@ -42,7 +43,7 @@ export function BuilderCanvasCell(props: {
 
     const useTool = useCallback(() => {
         if (activeTool === "platform") {
-            placeEntity("platform");
+            placeEntity(new PlatformEntity(props.x, props.y));
         }
     }, [activeTool, placeEntity]);
 
