@@ -53,10 +53,6 @@ export function BuilderCanvasCell(props: {
     const useTool = useCallback(() => {
         setSelectedCoords(new Coords(props.coords.x, props.coords.y));
 
-        if (activeTool === "platform") {
-            setEntity(new PlatformEntity(props.coords));
-        }
-
         switch (activeTool) {
             case "platform": {
                 setEntity(new PlatformEntity(props.coords));
