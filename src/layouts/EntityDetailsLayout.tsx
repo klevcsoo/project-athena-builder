@@ -66,7 +66,7 @@ function EntityNameEditor(props: Entity) {
 function EntityCoordinates(props: Entity) {
     return (
         <div className={cnx(
-            "h-10", "w-full", "px-4",
+            "h-12", "w-full", "px-4",
             "flex", "flex-row", "gap-4", "items-center", "justify-between",
             "bg-neutral-900", "rounded-md"
         )}>
@@ -118,7 +118,7 @@ function PlatformOrientationEditor(props: PlatformEntity) {
 
     return (
         <div className={cnx(
-            "h-10", "w-full", "px-4",
+            "h-12", "w-full", "px-4",
             "flex", "flex-row", "gap-4", "items-center", "justify-between",
             "bg-neutral-900", "rounded-md"
         )}>
@@ -148,7 +148,7 @@ function SpawnPointCharacterEditor(props: SpawnEntity) {
 
     return (
         <div className={cnx(
-            "h-10", "w-full", "px-4",
+            "h-12", "w-full", "px-4",
             "flex", "flex-row", "gap-4", "items-center", "justify-between",
             "bg-neutral-900", "rounded-md"
         )}>

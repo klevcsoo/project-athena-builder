@@ -14,7 +14,7 @@ export function DropdownInput(props: {
         <select name={dropdownId} id={dropdownId} onChange={event => {
             props.onSelected(event.currentTarget.value);
         }} value={props.selected} className={cnx(
-            "w-full", "max-w-xs", "px-2", "py-1",
+            "w-full", "h-8", "max-w-xs", "px-2", "py-1",
             "bg-neutral-900", "rounded-md",
             "hover:bg-neutral-800",
             "focus:bg-neutral-800",

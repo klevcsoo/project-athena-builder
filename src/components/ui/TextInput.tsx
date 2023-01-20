@@ -11,7 +11,7 @@ export function TextInput(props: {
         <input type="text" value={props.text} onChange={event => {
             props.onText(event.currentTarget.value);
         }} className={cnx(
-            "w-full", "h-10", "px-2",
+            "w-full", "h-12", "px-4",
             "bg-neutral-900", "rounded-lg", "text-white",
             "hover:bg-neutral-800",
             "focus:bg-neutral-800", "focus:outline-none"
