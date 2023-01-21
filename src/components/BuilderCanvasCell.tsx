@@ -1,5 +1,5 @@
 import {useActiveTool} from "../hooks/useActiveTool";
-import {ReactNode, useCallback, useMemo, useState} from "react";
+import {MouseEventHandler, ReactNode, useCallback, useMemo, useState} from "react";
 import {useWorldEntity} from "../hooks/useWorldEntity";
 import {PointerToolShell} from "./pointer/PointerToolShell";
 import {PlatformToolShell} from "./platform/PlatformToolShell";
@@ -19,6 +19,7 @@ export function BuilderCanvasCell(props: {
     const [selectedCoords, setSelectedCoords] = useSelectedEntityCoords();
     const [hovering, setHovering] = useState(false);
     const [entity, setEntity] = useWorldEntity(props.coords);
+    const [mouseInitPos, setMouseInitPos] = useState(new Coords(0, 0));
 
     const toolShell = useMemo<ReactNode>(() => {
         switch (activeTool) {
@@ -50,23 +51,29 @@ export function BuilderCanvasCell(props: {
         }
     }, [entity]);
 
-    const useTool = useCallback(() => {
-        setSelectedCoords(new Coords(props.coords.x, props.coords.y));
+    const useTool = useCallback<MouseEventHandler<HTMLDivElement>>(
+        (event) => {
+            if (mouseInitPos.x !== event.clientX || mouseInitPos.y !== event.clientY) {
+                return;
+            }
 
-        switch (activeTool) {
-            case "platform": {
-                setEntity(new PlatformEntity(props.coords));
-                break;
+            setSelectedCoords(new Coords(props.coords.x, props.coords.y));
+
+            switch (activeTool) {
+                case "platform": {
+                    setEntity(new PlatformEntity(props.coords));
+                    break;
+                }
+                case "spawn": {
+                    setEntity(new SpawnEntity(props.coords));
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
-            case "spawn": {
-                setEntity(new SpawnEntity(props.coords));
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-    }, [activeTool, setEntity, setSelectedCoords, props.coords]);
+        }, [activeTool, setEntity, setSelectedCoords, props.coords, mouseInitPos]
+    );
 
     return (
         <div className={cnx(
@@ -79,7 +86,9 @@ export function BuilderCanvasCell(props: {
             setHovering(true);
         }} onMouseLeave={() => {
             setHovering(false);
-        }} onClick={useTool}>
+        }} onClick={useTool} onMouseDown={event => {
+            setMouseInitPos(new Coords(event.clientX, event.clientY));
+        }}>
             <p className={cnx(
                 "text-white", "text-sm", "text-opacity-10"
             )}>{props.coords.x}; {props.coords.y}            </p>
