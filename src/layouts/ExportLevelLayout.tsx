@@ -40,8 +40,9 @@ function ExportLevelPopup(props: {
             console.error(reason);
         }).finally(() => {
             setLoading(false);
+            props.onDismiss();
         });
-    }, [exportLevel, filename]);
+    }, [exportLevel, filename, props]);
 
     useEffect(() => {
         setValidity(checkEntityMapValidity());
