@@ -12,4 +12,11 @@ export class SwitchEntity extends Entity {
         const name = `switch-${Math.floor(Math.random() * 8192).toString(16)}`;
         super(coordinates, name, "switch");
     }
+
+    public get details(): any {
+        return {
+            channel: this.commsChannel,
+            colour: this.colour
+        }
+    }
 }

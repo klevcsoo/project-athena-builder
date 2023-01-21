@@ -4,7 +4,6 @@ import {entityMap} from "../core/entity";
 import {LevelData} from "../lib/LevelData";
 import {Coords} from "../lib/Coords";
 import {SpawnEntity} from "../lib/entity/SpawnEntity";
-import {PlatformEntity} from "../lib/entity/PlatformEntity";
 
 export function useExportLevel() {
     return useCallback(async (filename: string) => {
@@ -42,18 +41,12 @@ function convert(): LevelData {
                 }
                 break;
             }
-            case "platform": {
-                entities.push({
-                    type: "platform",
-                    position: e.position,
-                    details: {
-                        orientation: (e as PlatformEntity).orientation
-                    }
-                });
-                break;
-            }
             default: {
-                throw new Error("Invalid entity type");
+                entities.push({
+                    type: e.entityType,
+                    position: e.position,
+                    details: e.details
+                });
             }
         }
     }

@@ -12,4 +12,11 @@ export class PressureButtonEntity extends Entity {
         const name = `pressure-button-${Math.floor(Math.random() * 8192).toString(16)}`;
         super(coordinates, name, "pressure-button");
     }
+
+    public get details(): any {
+        return {
+            channel: this.commsChannel,
+            colour: this.colour
+        }
+    }
 }

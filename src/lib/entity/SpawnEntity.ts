@@ -8,4 +8,10 @@ export class SpawnEntity extends Entity {
         const name = `spawn-${Math.floor(Math.random() * 8192).toString(16)}`;
         super(coordinates, name, "spawn");
     }
+
+    public get details(): any {
+        return {
+            character: this.character
+        }
+    }
 }

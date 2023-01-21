@@ -8,4 +8,10 @@ export class ShardEntity extends Entity {
         const name = `shard-${Math.floor(Math.random() * 8192).toString(16)}`;
         super(coordinates, name, "shard");
     }
+
+    public get details(): any {
+        return {
+            character: this.character
+        };
+    }
 }

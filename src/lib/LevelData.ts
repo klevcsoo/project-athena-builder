@@ -1,9 +1,3 @@
-import {PlatformEntityOrientation} from "./entity/PlatformEntity";
-
-type PlatformDetails = {
-    orientation: PlatformEntityOrientation
-}
-
 export type LevelData = {
     spawn: {
         anna: {
@@ -21,6 +15,6 @@ export type LevelData = {
             x: number
             y: number
         }
-        details?: PlatformDetails
+        details?: any
     }[]
 }

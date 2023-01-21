@@ -7,4 +7,6 @@ export abstract class Entity {
         public entityType: "platform" | "spawn" | "pressure-button" | "switch" | "shard"
     ) {
     }
+
+    public abstract get details(): any
 }

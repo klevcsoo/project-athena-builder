@@ -9,4 +9,10 @@ export class PlatformEntity extends Entity {
         const name = `platform-${Math.floor(Math.random() * 8192).toString(16)}`;
         super(coordinates, name, "platform");
     }
+
+    public get details(): any {
+        return {
+            orientation: this.orientation
+        };
+    }
 }
