@@ -13,6 +13,8 @@ import {PressureButtonWorldObject} from "./worldObject/PressureButtonWorldObject
 import {PressureButtonEntity} from "../lib/entity/PressureButtonEntity";
 import {SwitchEntity} from "../lib/entity/SwitchEntity";
 import {SwitchWorldObject} from "./worldObject/SwitchWorldObject";
+import {ShardEntity} from "../lib/entity/ShardEntity";
+import {ShardWorldObject} from "./worldObject/ShardWorldObject";
 
 export function BuilderCanvasCell(props: {
     coords: Coords
@@ -40,6 +42,10 @@ export function BuilderCanvasCell(props: {
             case "switch":
                 return <SwitchWorldObject colour={
                     (entity as SwitchEntity).colour
+                }/>;
+            case "shard":
+                return <ShardWorldObject character={
+                    (entity as ShardEntity).character
                 }/>;
             default:
                 return null;
@@ -69,6 +75,10 @@ export function BuilderCanvasCell(props: {
                 }
                 case "switch": {
                     setEntity(new SwitchEntity(props.coords));
+                    break;
+                }
+                case "shard": {
+                    setEntity(new ShardEntity(props.coords));
                     break;
                 }
                 default: {

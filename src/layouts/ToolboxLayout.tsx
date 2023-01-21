@@ -17,6 +17,7 @@ export function ToolboxLayout() {
             <ToolboxButton tool={"platform"}/>
             <ToolboxButton tool={"pressure-button"}/>
             <ToolboxButton tool={"switch"}/>
+            <ToolboxButton tool={"shard"}/>
         </div>
     );
 }

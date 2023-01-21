@@ -13,6 +13,7 @@ import {CardinalDirection} from "../lib/CardinalDirection";
 import {PressureButtonEntity} from "../lib/entity/PressureButtonEntity";
 import {ColourInput} from "../components/ui/ColourInput";
 import {SwitchEntity} from "../lib/entity/SwitchEntity";
+import {ShardEntity} from "../lib/entity/ShardEntity";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();
@@ -59,6 +60,11 @@ export function EntityDetailsLayout() {
             {entity.entityType === "switch" ? (
                 <Fragment>
                     <CommsChannelEditor {...entity as SwitchEntity}/>
+                </Fragment>
+            ) : null}
+            {entity.entityType === "shard" ? (
+                <Fragment>
+                    <ShardCharacterEditor {...entity as ShardEntity} />
                 </Fragment>
             ) : null}
             <DeleteEntityButton entity={entity} onDelete={() => {
@@ -246,6 +252,38 @@ function PressureButtonColourEditor(props: PressureButtonEntity) {
                 });
                 setColour(colour1);
             }}/>
+        </div>
+    );
+}
+
+function ShardCharacterEditor(props: ShardEntity) {
+    const options = useMemo<["anna", "ben", "both"]>(() => {
+        return ["anna", "ben", "both"];
+    }, []);
+    const [selected, setSelected] = useState<ShardEntity["character"]>(
+        props.character
+    );
+
+    useEffect(() => {
+        setSelected(props.character);
+    }, [props.character]);
+
+    return (
+        <div className={cnx(
+            "h-12", "w-full", "px-4",
+            "flex", "flex-row", "gap-4", "items-center", "justify-between",
+            "bg-neutral-900", "rounded-md"
+        )}>
+            <MaterialSymbol name={"person"}/>
+            <DropdownInput
+                options={options}
+                selected={selected}
+                onSelected={value => {
+                    setSelected(value as any);
+                    updateEntityAt<ShardEntity>(props.position, {
+                        character: value as any
+                    });
+                }}/>
         </div>
     );
 }

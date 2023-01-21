@@ -4,7 +4,7 @@ export abstract class Entity {
     protected constructor(
         public readonly position: Coords,
         public name: string,
-        public entityType: "platform" | "spawn" | "pressure-button" | "switch"
+        public entityType: "platform" | "spawn" | "pressure-button" | "switch" | "shard"
     ) {
     }
 }
