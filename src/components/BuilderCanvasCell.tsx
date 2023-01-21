@@ -93,7 +93,7 @@ export function BuilderCanvasCell(props: {
             setMouseInitPos(new Coords(event.clientX, event.clientY));
         }}>
             <p className={cnx(
-                "text-white", "text-sm", "text-opacity-10"
+                "text-white", "text-sm", "text-opacity-10", "mx-1"
             )}>{props.coords.x}; {props.coords.y}            </p>
             {hovering ? (<ToolShell tool={activeTool}/>) : null}
             {entityObject}
