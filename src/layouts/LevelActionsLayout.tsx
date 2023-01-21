@@ -7,7 +7,7 @@ import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 import {TextInput} from "../components/ui/TextInput";
 import {useExportLevel} from "../hooks/useExportLevel";
 
-export function ExportLevelLayout() {
+export function LevelActionsLayout() {
     const [popup, setPopup] = useState(false);
 
     return (
