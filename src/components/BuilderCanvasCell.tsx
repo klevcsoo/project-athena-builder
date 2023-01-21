@@ -11,6 +11,8 @@ import {SpawnEntity} from "../lib/entity/SpawnEntity";
 import {ToolShell} from "./ToolShell";
 import {PressureButtonWorldObject} from "./worldObject/PressureButtonWorldObject";
 import {PressureButtonEntity} from "../lib/entity/PressureButtonEntity";
+import {SwitchEntity} from "../lib/entity/SwitchEntity";
+import {SwitchWorldObject} from "./worldObject/SwitchWorldObject";
 
 export function BuilderCanvasCell(props: {
     coords: Coords
@@ -32,8 +34,12 @@ export function BuilderCanvasCell(props: {
                     (entity as SpawnEntity).character
                 }/>;
             case "pressure-button":
-                return <PressureButtonWorldObject color={
+                return <PressureButtonWorldObject colour={
                     (entity as PressureButtonEntity).colour
+                }/>;
+            case "switch":
+                return <SwitchWorldObject colour={
+                    (entity as SwitchEntity).colour
                 }/>;
             default:
                 return null;
@@ -59,6 +65,10 @@ export function BuilderCanvasCell(props: {
                 }
                 case "pressure-button": {
                     setEntity(new PressureButtonEntity(props.coords));
+                    break;
+                }
+                case "switch": {
+                    setEntity(new SwitchEntity(props.coords));
                     break;
                 }
                 default: {

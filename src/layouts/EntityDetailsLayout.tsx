@@ -12,6 +12,7 @@ import {BasicButton} from "../components/ui/BasicButton";
 import {CardinalDirection} from "../lib/CardinalDirection";
 import {PressureButtonEntity} from "../lib/entity/PressureButtonEntity";
 import {ColourInput} from "../components/ui/ColourInput";
+import {SwitchEntity} from "../lib/entity/SwitchEntity";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();
@@ -51,8 +52,13 @@ export function EntityDetailsLayout() {
             ) : null}
             {entity.entityType === "pressure-button" ? (
                 <Fragment>
-                    <PressureButtonChannelEditor {...entity as PressureButtonEntity} />
+                    <CommsChannelEditor {...entity as PressureButtonEntity} />
                     <PressureButtonColourEditor {...entity as PressureButtonEntity}/>
+                </Fragment>
+            ) : null}
+            {entity.entityType === "switch" ? (
+                <Fragment>
+                    <CommsChannelEditor {...entity as SwitchEntity}/>
                 </Fragment>
             ) : null}
             <DeleteEntityButton entity={entity} onDelete={() => {
@@ -191,7 +197,7 @@ function DeleteEntityButton(props: {
     );
 }
 
-function PressureButtonChannelEditor(props: PressureButtonEntity) {
+function CommsChannelEditor(props: PressureButtonEntity | SwitchEntity) {
     const [channel, setChannel] = useState(props.commsChannel);
 
     useEffect(() => {
@@ -209,7 +215,9 @@ function PressureButtonChannelEditor(props: PressureButtonEntity) {
                        placeholder={"Communication channel"}
                        className={"h-8 text-end"}
                        onSubmit={() => {
-                           updateEntityAt<PressureButtonEntity>(props.position, {
+                           updateEntityAt<
+                               PressureButtonEntity | SwitchEntity
+                           >(props.position, {
                                commsChannel: channel
                            });
                        }}/>

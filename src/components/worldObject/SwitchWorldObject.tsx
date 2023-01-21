@@ -1,8 +1,8 @@
-import {cnx} from "../../core/util";
-import {PlatformWorldObject} from "./PlatformWorldObject";
 import {useMemo} from "react";
+import {PlatformWorldObject} from "./PlatformWorldObject";
+import {cnx} from "../../core/util";
 
-export function PressureButtonWorldObject(props: {
+export function SwitchWorldObject(props: {
     colour: number
 }) {
     const colourString = useMemo<string>(() => {
@@ -18,15 +18,17 @@ export function PressureButtonWorldObject(props: {
                 "bg-white", "rounded-sm"
             )}></div>
             <div className={cnx(
-                "absolute", "bottom-1/3", "left-1/2",
-                "-translate-x-1/2",
-                "w-4/5", "h-[5%]",
+                "absolute", "bottom-1/4", "left-1/2",
+                "-translate-x-1/2", "-translate-y-1/2",
+                "rotate-45",
+                "w-1/2", "h-[10%]",
                 "rounded-sm"
             )} style={{backgroundColor: colourString}}></div>
             <div className={cnx(
-                "absolute", "bottom-1/4", "left-1/2", "z-20",
-                "-translate-x-1/2",
-                "w-4/5", "h-[10%]",
+                "absolute", "bottom-1/4", "left-1/2",
+                "-translate-x-1/2", "-translate-y-1/2",
+                "rotate-45",
+                "w-1/2", "h-[10%]",
                 "rounded-sm", "blur-lg", "animate-pulse"
             )} style={{backgroundColor: colourString}}></div>
             <PlatformWorldObject orientation={"south"}/>
