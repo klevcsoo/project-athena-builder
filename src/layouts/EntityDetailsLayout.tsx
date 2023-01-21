@@ -39,32 +39,33 @@ export function EntityDetailsLayout() {
             "text-white"
         )}>
             <h2 className={"text-2xl"}>{entityTitle}</h2>
-            <EntityNameEditor {...entity}/>
-            <EntityCoordinates {...entity} />
+            <EntityNameEditor entity={entity}/>
+            <EntityCoordinates entity={entity}/>
             {entity.entityType === "platform" ? (
                 <Fragment>
-                    <PlatformOrientationEditor {...entity as PlatformEntity}/>
+                    <PlatformOrientationEditor entity={entity as PlatformEntity}/>
                 </Fragment>
             ) : null}
             {entity.entityType === "spawn" ? (
                 <Fragment>
-                    <SpawnPointCharacterEditor {...entity as SpawnEntity}/>
+                    <SpawnPointCharacterEditor entity={entity as SpawnEntity}/>
                 </Fragment>
             ) : null}
             {entity.entityType === "pressure-button" ? (
                 <Fragment>
-                    <CommsChannelEditor {...entity as PressureButtonEntity} />
-                    <PressureButtonColourEditor {...entity as PressureButtonEntity}/>
+                    <CommsChannelEditor entity={entity as PressureButtonEntity}/>
+                    <ColourEditor entity={entity as PressureButtonEntity}/>
                 </Fragment>
             ) : null}
             {entity.entityType === "switch" ? (
                 <Fragment>
-                    <CommsChannelEditor {...entity as SwitchEntity}/>
+                    <CommsChannelEditor entity={entity as SwitchEntity}/>
+                    <ColourEditor entity={entity as SwitchEntity}/>
                 </Fragment>
             ) : null}
             {entity.entityType === "shard" ? (
                 <Fragment>
-                    <ShardCharacterEditor {...entity as ShardEntity} />
+                    <ShardCharacterEditor entity={entity as ShardEntity}/>
                 </Fragment>
             ) : null}
             <DeleteEntityButton entity={entity} onDelete={() => {
@@ -74,21 +75,25 @@ export function EntityDetailsLayout() {
     );
 }
 
-function EntityNameEditor(props: Entity) {
-    const [name, setName] = useState(props.name);
+function EntityNameEditor(props: {
+    entity: Entity
+}) {
+    const [name, setName] = useState(props.entity.name);
 
     useEffect(() => {
-        setName(props.name);
-    }, [props.name]);
+        setName(props.entity.name);
+    }, [props.entity]);
 
     return (
         <TextInput text={name} onText={setName} onSubmit={() => {
-            updateEntityAt(props.position, {name: name});
+            updateEntityAt(props.entity.position, {name: name});
         }} placeholder={"Entity name"}/>
     );
 }
 
-function EntityCoordinates(props: Entity) {
+function EntityCoordinates(props: {
+    entity: Entity
+}) {
     return (
         <div className={cnx(
             "h-12", "w-full", "px-4",
@@ -109,7 +114,7 @@ function EntityCoordinates(props: Entity) {
                     <div className={cnx(
                         "w-16", "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
                         "grid", "place-content-center"
-                    )}><b className={"font-mono"}>{props.position.x}</b></div>
+                    )}><b className={"font-mono"}>{props.entity.position.x}</b></div>
                 </div>
                 <div className={cnx(
                     "flex", "flex-row", "items-center", "justify-items-stretch"
@@ -121,24 +126,26 @@ function EntityCoordinates(props: Entity) {
                     <div className={cnx(
                         "w-16", "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
                         "grid", "place-content-center"
-                    )}><b className={"font-mono"}>{props.position.y}</b></div>
+                    )}><b className={"font-mono"}>{props.entity.position.y}</b></div>
                 </div>
             </div>
         </div>
     );
 }
 
-function PlatformOrientationEditor(props: PlatformEntity) {
+function PlatformOrientationEditor(props: {
+    entity: PlatformEntity
+}) {
     const options = useMemo<CardinalDirection[]>(() => {
         return [
             "north", "south", "west", "east"
         ];
     }, []);
-    const [selected, setSelected] = useState<string>(props.orientation);
+    const [selected, setSelected] = useState<string>(props.entity.orientation);
 
     useEffect(() => {
-        setSelected(props.orientation);
-    }, [props]);
+        setSelected(props.entity.orientation);
+    }, [props.entity]);
 
     return (
         <div className={cnx(
@@ -152,7 +159,7 @@ function PlatformOrientationEditor(props: PlatformEntity) {
                 selected={selected}
                 onSelected={value => {
                     setSelected(value);
-                    updateEntityAt<PlatformEntity>(props.position, {
+                    updateEntityAt<PlatformEntity>(props.entity.position, {
                         orientation: value as CardinalDirection
                     });
                 }}/>
@@ -160,15 +167,17 @@ function PlatformOrientationEditor(props: PlatformEntity) {
     );
 }
 
-function SpawnPointCharacterEditor(props: SpawnEntity) {
+function SpawnPointCharacterEditor(props: {
+    entity: SpawnEntity
+}) {
     const options = useMemo<["anna", "ben"]>(() => {
         return ["anna", "ben"];
     }, []);
-    const [selected, setSelected] = useState<"anna" | "ben">(props.character);
+    const [selected, setSelected] = useState<"anna" | "ben">(props.entity.character);
 
     useEffect(() => {
-        setSelected(props.character);
-    }, [props.character]);
+        setSelected(props.entity.character);
+    }, [props.entity]);
 
     return (
         <div className={cnx(
@@ -182,7 +191,7 @@ function SpawnPointCharacterEditor(props: SpawnEntity) {
                 selected={selected}
                 onSelected={value => {
                     setSelected(value as any);
-                    updateEntityAt<SpawnEntity>(props.position, {
+                    updateEntityAt<SpawnEntity>(props.entity.position, {
                         character: value as any
                     });
                 }}/>
@@ -191,7 +200,8 @@ function SpawnPointCharacterEditor(props: SpawnEntity) {
 }
 
 function DeleteEntityButton(props: {
-    entity: Entity; onDelete(): void
+    entity: Entity
+    onDelete(): void
 }) {
     const doDelete = useCallback(() => {
         destroyEntityAt(props.entity.position);
@@ -203,12 +213,14 @@ function DeleteEntityButton(props: {
     );
 }
 
-function CommsChannelEditor(props: PressureButtonEntity | SwitchEntity) {
-    const [channel, setChannel] = useState(props.commsChannel);
+function CommsChannelEditor(props: {
+    entity: PressureButtonEntity | SwitchEntity
+}) {
+    const [channel, setChannel] = useState(props.entity.commsChannel);
 
     useEffect(() => {
-        setChannel(props.commsChannel);
-    }, [props.commsChannel]);
+        setChannel(props.entity.commsChannel);
+    }, [props.entity]);
 
     return (
         <div className={cnx(
@@ -223,7 +235,7 @@ function CommsChannelEditor(props: PressureButtonEntity | SwitchEntity) {
                        onSubmit={() => {
                            updateEntityAt<
                                PressureButtonEntity | SwitchEntity
-                           >(props.position, {
+                           >(props.entity.position, {
                                commsChannel: channel
                            });
                        }}/>
@@ -231,13 +243,15 @@ function CommsChannelEditor(props: PressureButtonEntity | SwitchEntity) {
     );
 }
 
-function PressureButtonColourEditor(props: PressureButtonEntity) {
-    const [colour, setColour] = useState(props.colour);
+function ColourEditor(props: {
+    entity: PressureButtonEntity | SwitchEntity
+}) {
+    const [colour, setColour] = useState(props.entity.colour);
 
     useEffect(() => {
-        console.log(props.colour.toString(16));
-        setColour(props.colour);
-    }, [props]);
+        console.log(props.entity.colour.toString(16));
+        setColour(props.entity.colour);
+    }, [props.entity]);
 
     return (
         <div className={cnx(
@@ -247,7 +261,9 @@ function PressureButtonColourEditor(props: PressureButtonEntity) {
         )}>
             <MaterialSymbol name={"format_color_fill"}/>
             <ColourInput colour={colour} onColour={colour1 => {
-                updateEntityAt<PressureButtonEntity>(props.position, {
+                updateEntityAt<
+                    PressureButtonEntity | SwitchEntity
+                >(props.entity.position, {
                     colour: colour1
                 });
                 setColour(colour1);
@@ -256,17 +272,19 @@ function PressureButtonColourEditor(props: PressureButtonEntity) {
     );
 }
 
-function ShardCharacterEditor(props: ShardEntity) {
+function ShardCharacterEditor(props: {
+    entity: ShardEntity
+}) {
     const options = useMemo<["anna", "ben", "both"]>(() => {
         return ["anna", "ben", "both"];
     }, []);
     const [selected, setSelected] = useState<ShardEntity["character"]>(
-        props.character
+        props.entity.character
     );
 
     useEffect(() => {
-        setSelected(props.character);
-    }, [props.character]);
+        setSelected(props.entity.character);
+    }, [props.entity]);
 
     return (
         <div className={cnx(
@@ -280,7 +298,7 @@ function ShardCharacterEditor(props: ShardEntity) {
                 selected={selected}
                 onSelected={value => {
                     setSelected(value as any);
-                    updateEntityAt<ShardEntity>(props.position, {
+                    updateEntityAt<ShardEntity>(props.entity.position, {
                         character: value as any
                     });
                 }}/>
