@@ -1,4 +1,5 @@
 import {cnx} from "../../core/util";
+import {HTMLAttributes} from "react";
 
 export function TextInput(props: {
     text: string
@@ -6,11 +7,12 @@ export function TextInput(props: {
     onSubmit?(): void
     placeholder?: string
     disabled?: boolean
+    className?: HTMLAttributes<HTMLInputElement>["className"]
 }) {
     return (
         <input type="text" value={props.text} onChange={event => {
             props.onText(event.currentTarget.value);
-        }} className={cnx(
+        }} className={props.className + " " + cnx(
             "w-full", "h-12", "px-4",
             "bg-neutral-900", "rounded-lg", "text-white",
             "hover:bg-neutral-800",

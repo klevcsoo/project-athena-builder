@@ -1,14 +1,8 @@
 import {cnx} from "../core/util";
 import {useActiveTool} from "../hooks/useActiveTool";
-import {ToolboxTool} from "../lib/ToolboxTool";
+import {ToolboxTool, toolIconMap} from "../lib/ToolboxTool";
 import {useMemo} from "react";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
-
-const toolIconMap: { [key in ToolboxTool]: string } = {
-    pointer: "arrow_selector_tool",
-    platform: "rounded_corner",
-    spawn: "person_pin_circle"
-};
 
 export function ToolboxLayout() {
     return (
@@ -21,6 +15,8 @@ export function ToolboxLayout() {
             <ToolboxButton tool={"pointer"}/>
             <ToolboxButton tool={"platform"}/>
             <ToolboxButton tool={"spawn"}/>
+            <ToolboxButton tool={"pressure-button"}/>
+            <ToolboxButton tool={"switch"}/>
         </div>
     );
 }

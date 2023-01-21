@@ -1,6 +1,6 @@
 import {Entity} from "./Entity";
-import {Coords} from "./Coords";
-import {CardinalDirection} from "./CardinalDirection";
+import {Coords} from "../Coords";
+import {CardinalDirection} from "../CardinalDirection";
 
 export class PlatformEntity extends Entity {
     public orientation: CardinalDirection = "south";

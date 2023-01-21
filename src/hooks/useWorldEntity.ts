@@ -1,5 +1,5 @@
 import {useCallback, useEffect, useState} from "react";
-import {Entity} from "../lib/Entity";
+import {Entity} from "../lib/entity/Entity";
 import {Coords} from "../lib/Coords";
 import {entityMap} from "../core/entity";
 

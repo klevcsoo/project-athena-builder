@@ -1,14 +1,17 @@
 import {cnx} from "../core/util";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
 import {Fragment, useCallback, useEffect, useMemo, useState} from "react";
-import {Entity} from "../lib/Entity";
+import {Entity} from "../lib/entity/Entity";
 import {TextInput} from "../components/ui/TextInput";
-import {PlatformEntity, PlatformEntityOrientation} from "../lib/PlatformEntity";
+import {PlatformEntity} from "../lib/entity/PlatformEntity";
 import {DropdownInput} from "../components/ui/DropdownInput";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
-import {SpawnEntity} from "../lib/SpawnEntity";
+import {SpawnEntity} from "../lib/entity/SpawnEntity";
 import {destroyEntityAt, getEntityAt, updateEntityAt} from "../core/entity";
 import {BasicButton} from "../components/ui/BasicButton";
+import {CardinalDirection} from "../lib/CardinalDirection";
+import {PressureButtonEntity} from "../lib/entity/PressureButtonEntity";
+import {ColourInput} from "../components/ui/ColourInput";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();
@@ -44,6 +47,12 @@ export function EntityDetailsLayout() {
             {entity.entityType === "spawn" ? (
                 <Fragment>
                     <SpawnPointCharacterEditor {...entity as SpawnEntity}/>
+                </Fragment>
+            ) : null}
+            {entity.entityType === "pressure-button" ? (
+                <Fragment>
+                    <PressureButtonChannelEditor {...entity as PressureButtonEntity} />
+                    <PressureButtonColourEditor {...entity as PressureButtonEntity}/>
                 </Fragment>
             ) : null}
             <DeleteEntityButton entity={entity} onDelete={() => {
@@ -108,17 +117,16 @@ function EntityCoordinates(props: Entity) {
 }
 
 function PlatformOrientationEditor(props: PlatformEntity) {
-    const options = useMemo<PlatformEntityOrientation[]>(() => {
+    const options = useMemo<CardinalDirection[]>(() => {
         return [
-            "north", "south", "west", "east",
-            "northwest", "northeast", "southwest", "southeast"
+            "north", "south", "west", "east"
         ];
     }, []);
     const [selected, setSelected] = useState<string>(props.orientation);
 
     useEffect(() => {
         setSelected(props.orientation);
-    }, [props.orientation]);
+    }, [props]);
 
     return (
         <div className={cnx(
@@ -133,7 +141,7 @@ function PlatformOrientationEditor(props: PlatformEntity) {
                 onSelected={value => {
                     setSelected(value);
                     updateEntityAt<PlatformEntity>(props.position, {
-                        orientation: value as PlatformEntityOrientation
+                        orientation: value as CardinalDirection
                     });
                 }}/>
         </div>
@@ -171,8 +179,7 @@ function SpawnPointCharacterEditor(props: SpawnEntity) {
 }
 
 function DeleteEntityButton(props: {
-    entity: Entity,
-    onDelete(): void
+    entity: Entity; onDelete(): void
 }) {
     const doDelete = useCallback(() => {
         destroyEntityAt(props.entity.position);
@@ -181,5 +188,56 @@ function DeleteEntityButton(props: {
 
     return (
         <BasicButton text={"Delete entity"} onClick={doDelete} warning/>
+    );
+}
+
+function PressureButtonChannelEditor(props: PressureButtonEntity) {
+    const [channel, setChannel] = useState(props.commsChannel);
+
+    useEffect(() => {
+        setChannel(props.commsChannel);
+    }, [props.commsChannel]);
+
+    return (
+        <div className={cnx(
+            "h-12", "w-full", "px-4",
+            "flex", "flex-row", "gap-4", "items-center", "justify-between",
+            "bg-neutral-900", "rounded-md"
+        )}>
+            <MaterialSymbol name={"lan"}/>
+            <TextInput text={channel} onText={setChannel}
+                       placeholder={"Communication channel"}
+                       className={"h-8 text-end"}
+                       onSubmit={() => {
+                           updateEntityAt<PressureButtonEntity>(props.position, {
+                               commsChannel: channel
+                           });
+                       }}/>
+        </div>
+    );
+}
+
+function PressureButtonColourEditor(props: PressureButtonEntity) {
+    const [colour, setColour] = useState(props.colour);
+
+    useEffect(() => {
+        console.log(props.colour.toString(16));
+        setColour(props.colour);
+    }, [props]);
+
+    return (
+        <div className={cnx(
+            "h-12", "w-full", "px-4",
+            "flex", "flex-row", "gap-4", "items-center", "justify-between",
+            "bg-neutral-900", "rounded-md"
+        )}>
+            <MaterialSymbol name={"format_color_fill"}/>
+            <ColourInput colour={colour} onColour={colour1 => {
+                updateEntityAt<PressureButtonEntity>(props.position, {
+                    colour: colour1
+                });
+                setColour(colour1);
+            }}/>
+        </div>
     );
 }

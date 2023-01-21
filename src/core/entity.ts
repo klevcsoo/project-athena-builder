@@ -1,8 +1,8 @@
 import {PubSubMapEventHandler} from "../lib/PubSubMapEventHandler";
 import {CoordinatesString} from "../lib/CoordinatesString";
-import {Entity} from "../lib/Entity";
+import {Entity} from "../lib/entity/Entity";
 import {Coords} from "../lib/Coords";
-import {SpawnEntity} from "../lib/SpawnEntity";
+import {SpawnEntity} from "../lib/entity/SpawnEntity";
 import {EntityMapValidityResult} from "../lib/EntityMapValidityResult";
 
 export const entityMap = new PubSubMapEventHandler<CoordinatesString, Entity>();

@@ -1,4 +1,4 @@
-import {PlatformEntityOrientation} from "./PlatformEntity";
+import {PlatformEntityOrientation} from "./entity/PlatformEntity";
 
 type PlatformDetails = {
     orientation: PlatformEntityOrientation

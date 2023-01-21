@@ -3,8 +3,8 @@ import {sleep} from "../core/util";
 import {entityMap} from "../core/entity";
 import {LevelData} from "../lib/LevelData";
 import {Coords} from "../lib/Coords";
-import {SpawnEntity} from "../lib/SpawnEntity";
-import {PlatformEntity} from "../lib/PlatformEntity";
+import {SpawnEntity} from "../lib/entity/SpawnEntity";
+import {PlatformEntity} from "../lib/entity/PlatformEntity";
 
 export function useExportLevel() {
     return useCallback(async (filename: string) => {

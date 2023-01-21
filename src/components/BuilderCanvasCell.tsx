@@ -1,16 +1,16 @@
 import {useActiveTool} from "../hooks/useActiveTool";
 import {MouseEventHandler, ReactNode, useCallback, useMemo, useState} from "react";
 import {useWorldEntity} from "../hooks/useWorldEntity";
-import {PointerToolShell} from "./pointer/PointerToolShell";
-import {PlatformToolShell} from "./platform/PlatformToolShell";
-import {SpawnToolShell} from "./spawn/SpawnToolShell";
-import {PlatformWorldObject} from "./platform/PlatformWorldObject";
+import {PlatformWorldObject} from "./worldObject/PlatformWorldObject";
 import {cnx} from "../core/util";
-import {PlatformEntity} from "../lib/PlatformEntity";
+import {PlatformEntity} from "../lib/entity/PlatformEntity";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
 import {Coords} from "../lib/Coords";
-import {SpawnWorldObject} from "./spawn/SpawnWorldObject";
-import {SpawnEntity} from "../lib/SpawnEntity";
+import {SpawnWorldObject} from "./worldObject/SpawnWorldObject";
+import {SpawnEntity} from "../lib/entity/SpawnEntity";
+import {ToolShell} from "./ToolShell";
+import {PressureButtonWorldObject} from "./worldObject/PressureButtonWorldObject";
+import {PressureButtonEntity} from "../lib/entity/PressureButtonEntity";
 
 export function BuilderCanvasCell(props: {
     coords: Coords
@@ -21,21 +21,6 @@ export function BuilderCanvasCell(props: {
     const [entity, setEntity] = useWorldEntity(props.coords);
     const [mouseInitPos, setMouseInitPos] = useState(new Coords(0, 0));
 
-    const toolShell = useMemo<ReactNode>(() => {
-        switch (activeTool) {
-            case "pointer":
-                return <PointerToolShell/>;
-            case "platform":
-                return <PlatformToolShell/>;
-            case "spawn":
-                return <SpawnToolShell/>;
-            default: {
-                setHovering(false);
-                throw new Error("Invalid tool name");
-            }
-        }
-    }, [activeTool]);
-
     const entityObject = useMemo<ReactNode>(() => {
         switch (entity?.entityType) {
             case "platform":
@@ -45,6 +30,10 @@ export function BuilderCanvasCell(props: {
             case "spawn":
                 return <SpawnWorldObject character={
                     (entity as SpawnEntity).character
+                }/>;
+            case "pressure-button":
+                return <PressureButtonWorldObject color={
+                    (entity as PressureButtonEntity).colour
                 }/>;
             default:
                 return null;
@@ -68,6 +57,10 @@ export function BuilderCanvasCell(props: {
                     setEntity(new SpawnEntity(props.coords));
                     break;
                 }
+                case "pressure-button": {
+                    setEntity(new PressureButtonEntity(props.coords));
+                    break;
+                }
                 default: {
                     break;
                 }
@@ -81,7 +74,7 @@ export function BuilderCanvasCell(props: {
             "border", "border-dashed", "border-white",
             "border-opacity-10",
             selectedCoords.toString() === props.coords.toString() ?
-                cnx("animate-pulse", "border-opacity-100") : ""
+                "border-opacity-100" : ""
         )} onMouseEnter={() => {
             setHovering(true);
         }} onMouseLeave={() => {
@@ -92,7 +85,7 @@ export function BuilderCanvasCell(props: {
             <p className={cnx(
                 "text-white", "text-sm", "text-opacity-10"
             )}>{props.coords.x}; {props.coords.y}            </p>
-            {hovering ? toolShell : null}
+            {hovering ? (<ToolShell tool={activeTool}/>) : null}
             {entityObject}
         </div>
     );

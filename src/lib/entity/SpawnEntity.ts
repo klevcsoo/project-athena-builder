@@ -1,5 +1,5 @@
 import {Entity} from "./Entity";
-import {Coords} from "./Coords";
+import {Coords} from "../Coords";
 
 export class SpawnEntity extends Entity {
     public character: "anna" | "ben" = "anna";

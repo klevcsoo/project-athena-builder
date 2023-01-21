@@ -1,9 +1,8 @@
 import {cnx} from "../../core/util";
-import {PlatformEntityOrientation} from "../../lib/PlatformEntity";
-import {Fragment} from "react";
+import {CardinalDirection} from "../../lib/CardinalDirection";
 
 export function PlatformWorldObject(props: {
-    orientation: PlatformEntityOrientation
+    orientation: CardinalDirection
 }) {
     return (
         <div className={cnx(
@@ -17,26 +16,6 @@ export function PlatformWorldObject(props: {
                 <PlatformSouth/>
             ) : props.orientation === "west" ? (
                 <PlatformWest/>
-            ) : props.orientation === "northeast" ? (
-                <Fragment>
-                    <PlatformNorth/>
-                    <PlatformEast/>
-                </Fragment>
-            ) : props.orientation === "northwest" ? (
-                <Fragment>
-                    <PlatformNorth/>
-                    <PlatformWest/>
-                </Fragment>
-            ) : props.orientation === "southeast" ? (
-                <Fragment>
-                    <PlatformSouth/>
-                    <PlatformEast/>
-                </Fragment>
-            ) : props.orientation === "southwest" ? (
-                <Fragment>
-                    <PlatformSouth/>
-                    <PlatformWest/>
-                </Fragment>
             ) : null}
         </div>
     );
@@ -47,7 +26,7 @@ function PlatformNorth() {
         <div className={cnx(
             "absolute",
             "border-2", "border-white",
-            "bg-neutral-400",
+            "bg-neutral-400", "rounded-md",
             "top-0", "w-full", "h-1/3"
         )}></div>
     );
@@ -58,7 +37,7 @@ function PlatformSouth() {
         <div className={cnx(
             "absolute",
             "border-2", "border-white",
-            "bg-neutral-400",
+            "bg-neutral-400", "rounded-md",
             "top-2/3", "w-full", "h-1/3"
         )}></div>
     );
@@ -69,7 +48,7 @@ function PlatformWest() {
         <div className={cnx(
             "absolute",
             "border-2", "border-white",
-            "bg-neutral-400",
+            "bg-neutral-400", "rounded-md",
             "left", "h-full", "w-1/3"
         )}></div>
     );
@@ -80,7 +59,7 @@ function PlatformEast() {
         <div className={cnx(
             "absolute",
             "border-2", "border-white",
-            "bg-neutral-400",
+            "bg-neutral-400", "rounded-md",
             "right-0", "h-full", "w-1/3"
         )}></div>
     );
