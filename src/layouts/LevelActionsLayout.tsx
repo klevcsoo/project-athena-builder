@@ -1,25 +1,53 @@
 import {cnx} from "../core/util";
 import {Fragment, useCallback, useEffect, useState} from "react";
 import {BasicButton} from "../components/ui/BasicButton";
-import {checkEntityMapValidity} from "../core/entity";
+import {checkEntityMapValidity, convertToEntityMap} from "../core/entity";
 import {EntityMapValidityResult} from "../lib/EntityMapValidityResult";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 import {TextInput} from "../components/ui/TextInput";
 import {useExportLevel} from "../hooks/useExportLevel";
+import {LevelData} from "../lib/LevelData";
 
 export function LevelActionsLayout() {
-    const [popup, setPopup] = useState(false);
+    const [exportPopup, setExportPopup] = useState(false);
+
+    const doImportLevel = useCallback(() => {
+        const input = document.createElement("input");
+        input.type = "file";
+        input.accept = ".lvl";
+        input.style.display = "none";
+        input.addEventListener("change", () => {
+            if (!!input.files) {
+                const file = input.files.item(0);
+                if (!!file) {
+                    file.text().then(value => {
+                        const levelData = JSON.parse(value) as LevelData;
+                        convertToEntityMap(levelData);
+                    }).catch(reason => {
+                        throw new Error(`Failed to read level data file: ${reason}`);
+                    });
+                }
+            }
+        });
+
+        document.body.append(input);
+        input.click();
+    }, []);
 
     return (
         <Fragment>
             <div className={cnx(
-                "absolute", "bottom-4", "left-24", "z-30"
+                "absolute", "bottom-4", "left-24", "z-30",
+                "grid", "grid-cols-2", "gap-4"
             )}>
                 <BasicButton text={"Export level"} onClick={() => {
-                    setPopup(true);
+                    setExportPopup(true);
                 }}/>
+                <BasicButton text={"Import level"} onClick={doImportLevel}/>
             </div>
-            {popup ? <ExportLevelPopup onDismiss={() => setPopup(false)}/> : null}
+            {exportPopup ? (
+                <ExportLevelPopup onDismiss={() => setExportPopup(false)}/>
+            ) : null}
         </Fragment>
     );
 }

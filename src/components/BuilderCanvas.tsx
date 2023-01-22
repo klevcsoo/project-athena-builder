@@ -3,8 +3,8 @@ import {clamp, cnx} from "../core/util";
 import {BuilderCanvasCell} from "./BuilderCanvasCell";
 import {Coords} from "../lib/Coords";
 
-const CANVAS_VIRTUAL_WIDTH = 40 as const; // units
-const CANVAS_VIRTUAL_HEIGHT = 20 as const; // units
+export const CANVAS_VIRTUAL_WIDTH = 40 as const; // units
+export const CANVAS_VIRTUAL_HEIGHT = 20 as const; // units
 const CANVAS_UNIT_SIZE = 100 as const; // px
 const CANVAS_REAL_WIDTH = CANVAS_VIRTUAL_WIDTH * CANVAS_UNIT_SIZE; // px
 const CANVAS_REAL_HEIGHT = CANVAS_VIRTUAL_HEIGHT * CANVAS_UNIT_SIZE; // px
