@@ -12,6 +12,11 @@ import {ShardEntity} from "../lib/entity/ShardEntity";
 import {CANVAS_VIRTUAL_HEIGHT, CANVAS_VIRTUAL_WIDTH} from "../components/BuilderCanvas";
 
 export const entityMap = new PubSubMapEventHandler<CoordinatesString, Entity>();
+(window as any)["displayEntityMap"] = () => {
+    const entities: Entity[] = [];
+    for (const e of entityMap.values()) entities.push(e);
+    return entities;
+};
 
 export function getEntityAt(c: Coords): Entity | undefined {
     return entityMap.get(c.toString());
