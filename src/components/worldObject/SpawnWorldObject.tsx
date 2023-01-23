@@ -1,8 +1,9 @@
 import {cnx} from "../../core/util";
 import {MaterialSymbol} from "../ui/MaterialSymbol";
+import {SpawnProperties} from "../../lib/entity/SpawnProperties";
 
 export function SpawnWorldObject(props: {
-    character: "anna" | "ben"
+    character: SpawnProperties["character"]
 }) {
     return (
         <div className={cnx(

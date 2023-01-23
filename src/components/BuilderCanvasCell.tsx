@@ -3,18 +3,20 @@ import {MouseEventHandler, ReactNode, useCallback, useMemo, useState} from "reac
 import {useWorldEntity} from "../hooks/useWorldEntity";
 import {PlatformWorldObject} from "./worldObject/PlatformWorldObject";
 import {cnx} from "../core/util";
-import {PlatformEntity} from "../lib/entity/PlatformEntity";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
 import {Coords} from "../lib/Coords";
 import {SpawnWorldObject} from "./worldObject/SpawnWorldObject";
-import {SpawnEntity} from "../lib/entity/SpawnEntity";
 import {ToolShell} from "./ToolShell";
 import {PressureButtonWorldObject} from "./worldObject/PressureButtonWorldObject";
-import {PressureButtonEntity} from "../lib/entity/PressureButtonEntity";
-import {SwitchEntity} from "../lib/entity/SwitchEntity";
 import {SwitchWorldObject} from "./worldObject/SwitchWorldObject";
-import {ShardEntity} from "../lib/entity/ShardEntity";
 import {ShardWorldObject} from "./worldObject/ShardWorldObject";
+import {Entity} from "../lib/entity/Entity";
+import {PlatformProperties} from "../lib/entity/PlatformProperties";
+import {SpawnProperties} from "../lib/entity/SpawnProperties";
+import {PressureButtonProperties} from "../lib/entity/PressureButtonProperties";
+import {SwitchProperties} from "../lib/entity/SwitchProperties";
+import {ShardProperties} from "../lib/entity/ShardProperties";
+import {createEntity} from "../core/entity";
 
 export function BuilderCanvasCell(props: {
     coords: Coords
@@ -26,26 +28,26 @@ export function BuilderCanvasCell(props: {
     const [mouseInitPos, setMouseInitPos] = useState(new Coords(0, 0));
 
     const entityObject = useMemo<ReactNode>(() => {
-        switch (entity?.entityType) {
+        switch (entity?.typeName) {
             case "platform":
                 return <PlatformWorldObject orientation={
-                    (entity as PlatformEntity).orientation
+                    (entity as Entity<PlatformProperties>).orientation
                 }/>;
             case "spawn":
                 return <SpawnWorldObject character={
-                    (entity as SpawnEntity).character
+                    (entity as Entity<SpawnProperties>).character
                 }/>;
             case "pressure-button":
                 return <PressureButtonWorldObject colour={
-                    (entity as PressureButtonEntity).colour
+                    (entity as Entity<PressureButtonProperties>).colour
                 }/>;
             case "switch":
                 return <SwitchWorldObject colour={
-                    (entity as SwitchEntity).colour
+                    (entity as Entity<SwitchProperties>).colour
                 }/>;
             case "shard":
                 return <ShardWorldObject character={
-                    (entity as ShardEntity).character
+                    (entity as Entity<ShardProperties>).character
                 }/>;
             default:
                 return null;
@@ -62,23 +64,40 @@ export function BuilderCanvasCell(props: {
 
             switch (activeTool) {
                 case "platform": {
-                    setEntity(new PlatformEntity(props.coords));
+                    setEntity(createEntity(
+                        props.coords, "platform", {
+                            orientation: "south"
+                        }));
                     break;
                 }
                 case "spawn": {
-                    setEntity(new SpawnEntity(props.coords));
+                    setEntity(createEntity(
+                        props.coords, "spawn", {
+                            character: "anna"
+                        }));
                     break;
                 }
                 case "pressure-button": {
-                    setEntity(new PressureButtonEntity(props.coords));
+                    setEntity(createEntity(
+                        props.coords, "pressure-button", {
+                            colour: Math.floor(Math.random() * 0xffffff),
+                            channel: crypto.randomUUID()
+                        }));
                     break;
                 }
                 case "switch": {
-                    setEntity(new SwitchEntity(props.coords));
+                    setEntity(createEntity(
+                        props.coords, "switch", {
+                            colour: Math.floor(Math.random() * 0xffffff),
+                            channel: crypto.randomUUID()
+                        }));
                     break;
                 }
                 case "shard": {
-                    setEntity(new ShardEntity(props.coords));
+                    setEntity(createEntity(
+                        props.coords, "shard", {
+                            character: "both"
+                        }));
                     break;
                 }
                 default: {

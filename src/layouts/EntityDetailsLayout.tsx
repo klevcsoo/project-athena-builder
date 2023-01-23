@@ -3,17 +3,17 @@ import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
 import {Fragment, useCallback, useEffect, useMemo, useState} from "react";
 import {Entity} from "../lib/entity/Entity";
 import {TextInput} from "../components/ui/TextInput";
-import {PlatformEntity} from "../lib/entity/PlatformEntity";
 import {DropdownInput} from "../components/ui/DropdownInput";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
-import {SpawnEntity} from "../lib/entity/SpawnEntity";
 import {destroyEntityAt, getEntityAt, updateEntityAt} from "../core/entity";
 import {BasicButton} from "../components/ui/BasicButton";
 import {CardinalDirection} from "../lib/CardinalDirection";
-import {PressureButtonEntity} from "../lib/entity/PressureButtonEntity";
 import {ColourInput} from "../components/ui/ColourInput";
-import {SwitchEntity} from "../lib/entity/SwitchEntity";
-import {ShardEntity} from "../lib/entity/ShardEntity";
+import {PlatformProperties} from "../lib/entity/PlatformProperties";
+import {SpawnProperties} from "../lib/entity/SpawnProperties";
+import {PressureButtonProperties} from "../lib/entity/PressureButtonProperties";
+import {SwitchProperties} from "../lib/entity/SwitchProperties";
+import {ShardProperties} from "../lib/entity/ShardProperties";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();
@@ -22,8 +22,8 @@ export function EntityDetailsLayout() {
     const entityTitle = useMemo<string>(() => {
         if (!entity) return "";
 
-        let s = entity.entityType.substring(1);
-        return entity.entityType[0].toLocaleUpperCase() + s;
+        let s = entity.typeName.substring(1);
+        return entity.typeName[0].toLocaleUpperCase() + s;
     }, [entity]);
 
     useEffect(() => {
@@ -41,31 +41,38 @@ export function EntityDetailsLayout() {
             <h2 className={"text-2xl"}>{entityTitle}</h2>
             <EntityNameEditor entity={entity}/>
             <EntityCoordinates entity={entity}/>
-            {entity.entityType === "platform" ? (
+            {entity.typeName === "platform" ? (
                 <Fragment>
-                    <PlatformOrientationEditor entity={entity as PlatformEntity}/>
+                    <PlatformOrientationEditor
+                        entity={entity as Entity<PlatformProperties>}/>
                 </Fragment>
             ) : null}
-            {entity.entityType === "spawn" ? (
+            {entity.typeName === "spawn" ? (
                 <Fragment>
-                    <SpawnPointCharacterEditor entity={entity as SpawnEntity}/>
+                    <SpawnPointCharacterEditor
+                        entity={entity as Entity<SpawnProperties>}/>
                 </Fragment>
             ) : null}
-            {entity.entityType === "pressure-button" ? (
+            {entity.typeName === "pressure-button" ? (
                 <Fragment>
-                    <CommsChannelEditor entity={entity as PressureButtonEntity}/>
-                    <ColourEditor entity={entity as PressureButtonEntity}/>
+                    <CommsChannelEditor
+                        entity={entity as Entity<PressureButtonProperties>}/>
+                    <ColourEditor
+                        entity={entity as Entity<PressureButtonProperties>}/>
                 </Fragment>
             ) : null}
-            {entity.entityType === "switch" ? (
+            {entity.typeName === "switch" ? (
                 <Fragment>
-                    <CommsChannelEditor entity={entity as SwitchEntity}/>
-                    <ColourEditor entity={entity as SwitchEntity}/>
+                    <CommsChannelEditor
+                        entity={entity as Entity<SwitchProperties>}/>
+                    <ColourEditor
+                        entity={entity as Entity<SwitchProperties>}/>
                 </Fragment>
             ) : null}
-            {entity.entityType === "shard" ? (
+            {entity.typeName === "shard" ? (
                 <Fragment>
-                    <ShardCharacterEditor entity={entity as ShardEntity}/>
+                    <ShardCharacterEditor
+                        entity={entity as Entity<ShardProperties>}/>
                 </Fragment>
             ) : null}
             <DeleteEntityButton entity={entity} onDelete={() => {
@@ -86,7 +93,7 @@ function EntityNameEditor(props: {
 
     return (
         <TextInput text={name} onText={setName} onSubmit={() => {
-            updateEntityAt(props.entity.position, {name: name});
+            updateEntityAt(props.entity.coords, {});
         }} placeholder={"Entity name"}/>
     );
 }
@@ -114,7 +121,7 @@ function EntityCoordinates(props: {
                     <div className={cnx(
                         "w-16", "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
                         "grid", "place-content-center"
-                    )}><b className={"font-mono"}>{props.entity.position.x}</b></div>
+                    )}><b className={"font-mono"}>{props.entity.coords.x}</b></div>
                 </div>
                 <div className={cnx(
                     "flex", "flex-row", "items-center", "justify-items-stretch"
@@ -126,7 +133,7 @@ function EntityCoordinates(props: {
                     <div className={cnx(
                         "w-16", "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
                         "grid", "place-content-center"
-                    )}><b className={"font-mono"}>{props.entity.position.y}</b></div>
+                    )}><b className={"font-mono"}>{props.entity.coords.y}</b></div>
                 </div>
             </div>
         </div>
@@ -134,14 +141,16 @@ function EntityCoordinates(props: {
 }
 
 function PlatformOrientationEditor(props: {
-    entity: PlatformEntity
+    entity: Entity<PlatformProperties>
 }) {
     const options = useMemo<CardinalDirection[]>(() => {
         return [
             "north", "south", "west", "east"
         ];
     }, []);
-    const [selected, setSelected] = useState<string>(props.entity.orientation);
+    const [selected, setSelected] = useState<string>(
+        props.entity.orientation
+    );
 
     useEffect(() => {
         setSelected(props.entity.orientation);
@@ -159,7 +168,7 @@ function PlatformOrientationEditor(props: {
                 selected={selected}
                 onSelected={value => {
                     setSelected(value);
-                    updateEntityAt<PlatformEntity>(props.entity.position, {
+                    updateEntityAt<PlatformProperties>(props.entity.coords, {
                         orientation: value as CardinalDirection
                     });
                 }}/>
@@ -168,117 +177,12 @@ function PlatformOrientationEditor(props: {
 }
 
 function SpawnPointCharacterEditor(props: {
-    entity: SpawnEntity
+    entity: Entity<SpawnProperties>
 }) {
     const options = useMemo<["anna", "ben"]>(() => {
         return ["anna", "ben"];
     }, []);
-    const [selected, setSelected] = useState<"anna" | "ben">(props.entity.character);
-
-    useEffect(() => {
-        setSelected(props.entity.character);
-    }, [props.entity]);
-
-    return (
-        <div className={cnx(
-            "h-12", "w-full", "px-4",
-            "flex", "flex-row", "gap-4", "items-center", "justify-between",
-            "bg-neutral-900", "rounded-md"
-        )}>
-            <MaterialSymbol name={"person"}/>
-            <DropdownInput
-                options={options}
-                selected={selected}
-                onSelected={value => {
-                    setSelected(value as any);
-                    updateEntityAt<SpawnEntity>(props.entity.position, {
-                        character: value as any
-                    });
-                }}/>
-        </div>
-    );
-}
-
-function DeleteEntityButton(props: {
-    entity: Entity
-    onDelete(): void
-}) {
-    const doDelete = useCallback(() => {
-        destroyEntityAt(props.entity.position);
-        props.onDelete();
-    }, [props]);
-
-    return (
-        <BasicButton text={"Delete entity"} onClick={doDelete} warning/>
-    );
-}
-
-function CommsChannelEditor(props: {
-    entity: PressureButtonEntity | SwitchEntity
-}) {
-    const [channel, setChannel] = useState(props.entity.commsChannel);
-
-    useEffect(() => {
-        setChannel(props.entity.commsChannel);
-    }, [props.entity]);
-
-    return (
-        <div className={cnx(
-            "h-12", "w-full", "px-4",
-            "flex", "flex-row", "gap-4", "items-center", "justify-between",
-            "bg-neutral-900", "rounded-md"
-        )}>
-            <MaterialSymbol name={"lan"}/>
-            <TextInput text={channel} onText={setChannel}
-                       placeholder={"Communication channel"}
-                       className={"h-8 text-end"}
-                       onSubmit={() => {
-                           updateEntityAt<
-                               PressureButtonEntity | SwitchEntity
-                           >(props.entity.position, {
-                               commsChannel: channel
-                           });
-                       }}/>
-        </div>
-    );
-}
-
-function ColourEditor(props: {
-    entity: PressureButtonEntity | SwitchEntity
-}) {
-    const [colour, setColour] = useState(props.entity.colour);
-
-    useEffect(() => {
-        console.log(props.entity.colour.toString(16));
-        setColour(props.entity.colour);
-    }, [props.entity]);
-
-    return (
-        <div className={cnx(
-            "h-12", "w-full", "px-4",
-            "flex", "flex-row", "gap-4", "items-center", "justify-between",
-            "bg-neutral-900", "rounded-md"
-        )}>
-            <MaterialSymbol name={"format_color_fill"}/>
-            <ColourInput colour={colour} onColour={colour1 => {
-                updateEntityAt<
-                    PressureButtonEntity | SwitchEntity
-                >(props.entity.position, {
-                    colour: colour1
-                });
-                setColour(colour1);
-            }}/>
-        </div>
-    );
-}
-
-function ShardCharacterEditor(props: {
-    entity: ShardEntity
-}) {
-    const options = useMemo<["anna", "ben", "both"]>(() => {
-        return ["anna", "ben", "both"];
-    }, []);
-    const [selected, setSelected] = useState<ShardEntity["character"]>(
+    const [selected, setSelected] = useState<"anna" | "ben">(
         props.entity.character
     );
 
@@ -298,7 +202,113 @@ function ShardCharacterEditor(props: {
                 selected={selected}
                 onSelected={value => {
                     setSelected(value as any);
-                    updateEntityAt<ShardEntity>(props.entity.position, {
+                    updateEntityAt<SpawnProperties>(props.entity.coords, {
+                        character: value as any
+                    });
+                }}/>
+        </div>
+    );
+}
+
+function DeleteEntityButton(props: {
+    entity: Entity
+    onDelete(): void
+}) {
+    const doDelete = useCallback(() => {
+        destroyEntityAt(props.entity.coords);
+        props.onDelete();
+    }, [props]);
+
+    return (
+        <BasicButton text={"Delete entity"} onClick={doDelete} warning/>
+    );
+}
+
+function CommsChannelEditor(props: {
+    entity: Entity<PressureButtonProperties | SwitchProperties>
+}) {
+    const [channel, setChannel] = useState(props.entity.channel);
+
+    useEffect(() => {
+        setChannel(props.entity.channel);
+    }, [props.entity]);
+
+    return (
+        <div className={cnx(
+            "h-12", "w-full", "px-4",
+            "flex", "flex-row", "gap-4", "items-center", "justify-between",
+            "bg-neutral-900", "rounded-md"
+        )}>
+            <MaterialSymbol name={"lan"}/>
+            <TextInput text={channel} onText={setChannel}
+                       placeholder={"Communication channel"}
+                       className={"h-8 text-end"}
+                       onSubmit={() => {
+                           updateEntityAt<
+                               PressureButtonProperties | SwitchProperties
+                           >(props.entity.coords, {
+                               channel: channel
+                           });
+                       }}/>
+        </div>
+    );
+}
+
+function ColourEditor(props: {
+    entity: Entity<PressureButtonProperties | SwitchProperties>
+}) {
+    const [colour, setColour] = useState(props.entity.colour);
+
+    useEffect(() => {
+        setColour(props.entity.colour);
+    }, [props.entity]);
+
+    return (
+        <div className={cnx(
+            "h-12", "w-full", "px-4",
+            "flex", "flex-row", "gap-4", "items-center", "justify-between",
+            "bg-neutral-900", "rounded-md"
+        )}>
+            <MaterialSymbol name={"format_color_fill"}/>
+            <ColourInput colour={colour} onColour={colour1 => {
+                updateEntityAt<
+                    PressureButtonProperties | SwitchProperties
+                >(props.entity.coords, {
+                    colour: colour1
+                });
+                setColour(colour1);
+            }}/>
+        </div>
+    );
+}
+
+function ShardCharacterEditor(props: {
+    entity: Entity<ShardProperties>
+}) {
+    const options = useMemo<["anna", "ben", "both"]>(() => {
+        return ["anna", "ben", "both"];
+    }, []);
+    const [selected, setSelected] = useState<ShardProperties["character"]>(
+        props.entity.character
+    );
+
+    useEffect(() => {
+        setSelected(props.entity.character);
+    }, [props.entity]);
+
+    return (
+        <div className={cnx(
+            "h-12", "w-full", "px-4",
+            "flex", "flex-row", "gap-4", "items-center", "justify-between",
+            "bg-neutral-900", "rounded-md"
+        )}>
+            <MaterialSymbol name={"person"}/>
+            <DropdownInput
+                options={options}
+                selected={selected}
+                onSelected={value => {
+                    setSelected(value as any);
+                    updateEntityAt<ShardProperties>(props.entity.coords, {
                         character: value as any
                     });
                 }}/>

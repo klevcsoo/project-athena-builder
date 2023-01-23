@@ -1,12 +1,18 @@
 import {Coords} from "../Coords";
+import {EmptyEntityProperties} from "./EmptyEntityProperties";
+import {EntityTypeMap} from "./EntityTypeMap";
 
-export abstract class Entity {
-    protected constructor(
-        public readonly position: Coords,
-        public name: string,
-        public entityType: "platform" | "spawn" | "pressure-button" | "switch" | "shard"
-    ) {
-    }
+// lol
+type EntityTypeMapWithEmptyEntity = {
+    empty: EmptyEntityProperties
+} & EntityTypeMap
 
-    public abstract get details(): any
-}
+export type Entity<
+    T extends EntityTypeMapWithEmptyEntity[
+        keyof EntityTypeMapWithEmptyEntity
+        ] = EmptyEntityProperties
+> = {
+    readonly coords: Coords
+    name: string
+    readonly typeName: T["typeName"]
+} & Omit<T, "typeName">

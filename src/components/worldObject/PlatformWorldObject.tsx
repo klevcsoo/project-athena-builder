@@ -1,8 +1,8 @@
 import {cnx} from "../../core/util";
-import {CardinalDirection} from "../../lib/CardinalDirection";
+import {PlatformProperties} from "../../lib/entity/PlatformProperties";
 
 export function PlatformWorldObject(props: {
-    orientation: CardinalDirection
+    orientation: PlatformProperties["orientation"]
 }) {
     return (
         <div className={cnx(

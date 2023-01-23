@@ -1,3 +1,5 @@
+import {Entity} from "./entity/Entity";
+
 export type LevelData = {
     spawn: {
         anna: {
@@ -9,12 +11,5 @@ export type LevelData = {
             y: number
         }
     }
-    entities: {
-        type: string
-        position: {
-            x: number
-            y: number
-        }
-        details?: any
-    }[]
+    entities: Entity[]
 }

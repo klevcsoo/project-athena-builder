@@ -1,9 +1,10 @@
 import {useMemo} from "react";
 import {PlatformWorldObject} from "./PlatformWorldObject";
 import {cnx} from "../../core/util";
+import {SwitchProperties} from "../../lib/entity/SwitchProperties";
 
 export function SwitchWorldObject(props: {
-    colour: number
+    colour: SwitchProperties["colour"]
 }) {
     const colourString = useMemo<string>(() => {
         return "#" + props.colour.toString(16);

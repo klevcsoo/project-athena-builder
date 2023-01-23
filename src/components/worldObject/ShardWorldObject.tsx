@@ -1,9 +1,9 @@
-import {ShardEntity} from "../../lib/entity/ShardEntity";
 import {cnx} from "../../core/util";
 import {MaterialSymbol} from "../ui/MaterialSymbol";
+import {ShardProperties} from "../../lib/entity/ShardProperties";
 
 export function ShardWorldObject(props: {
-    character: ShardEntity["character"]
+    character: ShardProperties["character"]
 }) {
     return (
         <div className={"absolute inset-0"}>

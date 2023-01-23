@@ -1,9 +1,10 @@
 import {cnx} from "../../core/util";
 import {PlatformWorldObject} from "./PlatformWorldObject";
 import {useMemo} from "react";
+import {PressureButtonProperties} from "../../lib/entity/PressureButtonProperties";
 
 export function PressureButtonWorldObject(props: {
-    colour: number
+    colour: PressureButtonProperties["colour"]
 }) {
     const colourString = useMemo<string>(() => {
         return "#" + props.colour.toString(16);
