@@ -6,13 +6,13 @@ import {DropdownInput} from "../components/ui/DropdownInput";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 import {destroyEntityAt, Entity, getEntityAt, updateEntityAt} from "../core/entity";
 import {BasicButton} from "../components/ui/BasicButton";
-import {CardinalDirection} from "../lib/CardinalDirection";
+import {CardinalDirection} from "../lib/types/CardinalDirection";
 import {ColourInput} from "../components/ui/ColourInput";
-import {PlatformProperties} from "../lib/entity/PlatformProperties";
-import {SpawnProperties} from "../lib/entity/SpawnProperties";
-import {PressureButtonProperties} from "../lib/entity/PressureButtonProperties";
-import {SwitchProperties} from "../lib/entity/SwitchProperties";
-import {ShardProperties} from "../lib/entity/ShardProperties";
+import {PlatformProperties} from "../lib/types/entity/PlatformProperties";
+import {SpawnProperties} from "../lib/types/entity/SpawnProperties";
+import {PressureButtonProperties} from "../lib/types/entity/PressureButtonProperties";
+import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
+import {ShardProperties} from "../lib/types/entity/ShardProperties";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();

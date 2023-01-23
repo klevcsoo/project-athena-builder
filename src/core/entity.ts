@@ -1,14 +1,14 @@
 import {PubSubMapEventHandler} from "../lib/PubSubMapEventHandler";
-import {EntityMapValidityResult} from "../lib/EntityMapValidityResult";
-import {LevelData} from "../lib/LevelData";
+import {EntityMapValidityResult} from "../lib/types/EntityMapValidityResult";
+import {LevelData} from "../lib/types/LevelData";
 import {CANVAS_VIRTUAL_HEIGHT, CANVAS_VIRTUAL_WIDTH} from "../components/BuilderCanvas";
-import {EntityTypeMap} from "../lib/entity/EntityTypeMap";
-import {SpawnProperties} from "../lib/entity/SpawnProperties";
-import {PlatformProperties} from "../lib/entity/PlatformProperties";
-import {PressureButtonProperties} from "../lib/entity/PressureButtonProperties";
-import {SwitchProperties} from "../lib/entity/SwitchProperties";
-import {ShardProperties} from "../lib/entity/ShardProperties";
-import {EmptyEntityProperties} from "../lib/entity/EmptyEntityProperties";
+import {EntityTypeMap} from "../lib/types/entity/EntityTypeMap";
+import {SpawnProperties} from "../lib/types/entity/SpawnProperties";
+import {PlatformProperties} from "../lib/types/entity/PlatformProperties";
+import {PressureButtonProperties} from "../lib/types/entity/PressureButtonProperties";
+import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
+import {ShardProperties} from "../lib/types/entity/ShardProperties";
+import {EmptyEntityProperties} from "../lib/types/entity/EmptyEntityProperties";
 import {Coords, coordsKey, createCoordinates} from "./coords";
 
 // lol

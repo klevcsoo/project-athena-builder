@@ -9,11 +9,11 @@ import {ToolShell} from "./ToolShell";
 import {PressureButtonWorldObject} from "./worldObject/PressureButtonWorldObject";
 import {SwitchWorldObject} from "./worldObject/SwitchWorldObject";
 import {ShardWorldObject} from "./worldObject/ShardWorldObject";
-import {PlatformProperties} from "../lib/entity/PlatformProperties";
-import {SpawnProperties} from "../lib/entity/SpawnProperties";
-import {PressureButtonProperties} from "../lib/entity/PressureButtonProperties";
-import {SwitchProperties} from "../lib/entity/SwitchProperties";
-import {ShardProperties} from "../lib/entity/ShardProperties";
+import {PlatformProperties} from "../lib/types/entity/PlatformProperties";
+import {SpawnProperties} from "../lib/types/entity/SpawnProperties";
+import {PressureButtonProperties} from "../lib/types/entity/PressureButtonProperties";
+import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
+import {ShardProperties} from "../lib/types/entity/ShardProperties";
 import {createEntity, Entity} from "../core/entity";
 import {Coords, coordsEqual, createCoordinates} from "../core/coords";
 

@@ -1,7 +1,7 @@
 import {cnx} from "../../core/util";
 import {PlatformWorldObject} from "./PlatformWorldObject";
 import {useMemo} from "react";
-import {PressureButtonProperties} from "../../lib/entity/PressureButtonProperties";
+import {PressureButtonProperties} from "../../lib/types/entity/PressureButtonProperties";
 
 export function PressureButtonWorldObject(props: {
     colour: PressureButtonProperties["colour"]

@@ -2,11 +2,11 @@ import {cnx} from "../core/util";
 import {Fragment, useCallback, useEffect, useState} from "react";
 import {BasicButton} from "../components/ui/BasicButton";
 import {checkEntityMapValidity, convertToEntityMap} from "../core/entity";
-import {EntityMapValidityResult} from "../lib/EntityMapValidityResult";
+import {EntityMapValidityResult} from "../lib/types/EntityMapValidityResult";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 import {TextInput} from "../components/ui/TextInput";
 import {useExportLevel} from "../hooks/useExportLevel";
-import {LevelData} from "../lib/LevelData";
+import {LevelData} from "../lib/types/LevelData";
 
 export function LevelActionsLayout() {
     const [exportPopup, setExportPopup] = useState(false);

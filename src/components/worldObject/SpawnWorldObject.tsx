@@ -1,6 +1,6 @@
 import {cnx} from "../../core/util";
 import {MaterialSymbol} from "../ui/MaterialSymbol";
-import {SpawnProperties} from "../../lib/entity/SpawnProperties";
+import {SpawnProperties} from "../../lib/types/entity/SpawnProperties";
 
 export function SpawnWorldObject(props: {
     character: SpawnProperties["character"]

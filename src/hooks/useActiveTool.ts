@@ -1,4 +1,4 @@
-import {ToolboxTool} from "../lib/ToolboxTool";
+import {ToolboxTool} from "../lib/types/ToolboxTool";
 import {useCallback, useEffect, useState} from "react";
 import {PubSubEventHandler} from "../lib/PubSubEventHandler";
 

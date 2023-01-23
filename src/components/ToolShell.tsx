@@ -1,6 +1,6 @@
 import {cnx} from "../core/util";
 import {MaterialSymbol} from "./ui/MaterialSymbol";
-import {ToolboxTool, toolIconMap} from "../lib/ToolboxTool";
+import {ToolboxTool, toolIconMap} from "../lib/types/ToolboxTool";
 import {Fragment, useMemo} from "react";
 
 export function ToolShell(props: {

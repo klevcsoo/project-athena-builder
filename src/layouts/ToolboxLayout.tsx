@@ -1,6 +1,6 @@
 import {cnx} from "../core/util";
 import {useActiveTool} from "../hooks/useActiveTool";
-import {ToolboxTool, toolIconMap} from "../lib/ToolboxTool";
+import {ToolboxTool, toolIconMap} from "../lib/types/ToolboxTool";
 import {useMemo} from "react";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 

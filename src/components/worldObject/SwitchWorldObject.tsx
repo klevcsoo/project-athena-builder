@@ -1,7 +1,7 @@
 import {useMemo} from "react";
 import {PlatformWorldObject} from "./PlatformWorldObject";
 import {cnx} from "../../core/util";
-import {SwitchProperties} from "../../lib/entity/SwitchProperties";
+import {SwitchProperties} from "../../lib/types/entity/SwitchProperties";
 
 export function SwitchWorldObject(props: {
     colour: SwitchProperties["colour"]

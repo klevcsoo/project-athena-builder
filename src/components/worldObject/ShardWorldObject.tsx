@@ -1,6 +1,6 @@
 import {cnx} from "../../core/util";
 import {MaterialSymbol} from "../ui/MaterialSymbol";
-import {ShardProperties} from "../../lib/entity/ShardProperties";
+import {ShardProperties} from "../../lib/types/entity/ShardProperties";
 
 export function ShardWorldObject(props: {
     character: ShardProperties["character"]

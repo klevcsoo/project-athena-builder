@@ -1,5 +1,5 @@
 import {cnx} from "../../core/util";
-import {PlatformProperties} from "../../lib/entity/PlatformProperties";
+import {PlatformProperties} from "../../lib/types/entity/PlatformProperties";
 
 export function PlatformWorldObject(props: {
     orientation: PlatformProperties["orientation"]
