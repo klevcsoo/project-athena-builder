@@ -3,7 +3,7 @@ export type ToolboxTool =
 
 export const toolIconMap: { [key in ToolboxTool]: string } = {
     "pointer": "arrow_selector_tool",
-    "platform": "smart_button",
+    "platform": "check_box_outline_blank",
     "spawn": "person_pin_circle",
     "pressure-button": "space_bar",
     "switch": "switch",
