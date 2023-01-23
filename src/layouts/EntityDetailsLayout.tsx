@@ -97,10 +97,8 @@ function EntityCoordinates(props: {
     const [elevation, setElevation] = useState(props.entity.elevation);
 
     useEffect(() => {
-        updateEntityAt(props.entity.coords, {
-            elevation: elevation
-        });
-    }, [elevation]);
+        setElevation(props.entity.elevation);
+    }, [props.entity]);
 
     return (
         <div className={cnx(
@@ -158,6 +156,9 @@ function EntityCoordinates(props: {
                             "bg-neutral-800", "rounded-tr-md",
                             "hover:bg-neutral-700"
                         )} onClick={() => {
+                            updateEntityAt(props.entity.coords, {
+                                elevation: elevation + 1
+                            });
                             setElevation(prevState => prevState + 1);
                         }}>+
                         </button>
@@ -166,6 +167,9 @@ function EntityCoordinates(props: {
                             "bg-neutral-800", "rounded-br-md",
                             "hover:bg-neutral-700"
                         )} onClick={() => {
+                            updateEntityAt(props.entity.coords, {
+                                elevation: elevation - 1
+                            });
                             setElevation(prevState => prevState - 1);
                         }}>-
                         </button>
