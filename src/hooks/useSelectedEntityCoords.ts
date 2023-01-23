@@ -1,8 +1,8 @@
 import {useCallback, useEffect, useState} from "react";
-import {Coords} from "../lib/Coords";
 import {PubSubEventHandler} from "../lib/PubSubEventHandler";
+import {Coords, createCoordinates} from "../core/coords";
 
-const pubsub = new PubSubEventHandler(new Coords(0, 0));
+const pubsub = new PubSubEventHandler(createCoordinates(0, 0));
 
 export function useSelectedEntityCoords(): [Coords, (c: Coords) => void] {
     const [coords, setCoords] = useState<Coords>(pubsub.get());

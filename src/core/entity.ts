@@ -1,7 +1,4 @@
 import {PubSubMapEventHandler} from "../lib/PubSubMapEventHandler";
-import {CoordinatesString} from "../lib/CoordinatesString";
-import {Entity} from "../lib/entity/Entity";
-import {Coords} from "../lib/Coords";
 import {EntityMapValidityResult} from "../lib/EntityMapValidityResult";
 import {LevelData} from "../lib/LevelData";
 import {CANVAS_VIRTUAL_HEIGHT, CANVAS_VIRTUAL_WIDTH} from "../components/BuilderCanvas";
@@ -11,8 +8,20 @@ import {PlatformProperties} from "../lib/entity/PlatformProperties";
 import {PressureButtonProperties} from "../lib/entity/PressureButtonProperties";
 import {SwitchProperties} from "../lib/entity/SwitchProperties";
 import {ShardProperties} from "../lib/entity/ShardProperties";
+import {EmptyEntityProperties} from "../lib/entity/EmptyEntityProperties";
+import {Coords, coordsKey, createCoordinates} from "./coords";
 
-export const entityMap = new PubSubMapEventHandler<CoordinatesString, Entity>();
+// lol
+type BaseEntityMap = { empty: EmptyEntityProperties } & EntityTypeMap
+export type Entity<
+    T extends BaseEntityMap[keyof BaseEntityMap] = EmptyEntityProperties
+> = {
+    readonly coords: Coords
+    name: string
+    readonly typeName: T["typeName"]
+} & Omit<T, "typeName">
+
+export const entityMap = new PubSubMapEventHandler<string, Entity>();
 (window as any)["displayEntityMap"] = () => {
     const entities: Entity[] = [];
     for (const e of entityMap.values()) entities.push(e);
@@ -22,7 +31,6 @@ export const entityMap = new PubSubMapEventHandler<CoordinatesString, Entity>();
 export function createEntity<T extends keyof EntityTypeMap>(
     coords: Coords, typeName: T, properties: Omit<EntityTypeMap[T], "typeName">
 ): Entity<EntityTypeMap[T]> {
-
     return {
         name: `${typeName}-${Math.floor(Math.random() * 8192).toString(16)}`,
         typeName: typeName,
@@ -32,15 +40,13 @@ export function createEntity<T extends keyof EntityTypeMap>(
 }
 
 export function getEntityAt(c: Coords): Entity | undefined {
-    return entityMap.get(c.toString());
+    return entityMap.get(coordsKey(c));
 }
 
 export function updateEntityAt<
     T extends EntityTypeMap[keyof EntityTypeMap]
->(
-    c: Coords, properties: Partial<Omit<T, "typeName">>
-) {
-    const key = c.toString();
+>(c: Coords, properties: Partial<Omit<T, "typeName">>) {
+    const key = coordsKey(c);
 
     if (entityMap.has(key)) {
         entityMap.set(key, {
@@ -51,7 +57,7 @@ export function updateEntityAt<
 }
 
 export function destroyEntityAt(c: Coords) {
-    entityMap.delete(c.toString());
+    entityMap.delete(coordsKey(c));
 }
 
 export function checkEntityMapValidity(): EntityMapValidityResult {
@@ -83,30 +89,31 @@ export function checkEntityMapValidity(): EntityMapValidityResult {
 export function convertToEntityMap(levelData: LevelData) {
     for (let i = 0; i < CANVAS_VIRTUAL_WIDTH; i++) {
         for (let j = 0; j < CANVAS_VIRTUAL_HEIGHT; j++) {
-            entityMap.delete(new Coords(i, j).toString());
+            entityMap.delete(coordsKey(createCoordinates(i, j)));
         }
     }
 
-    const annaSpawnCoords = new Coords(
+    const annaSpawnCoords = createCoordinates(
         levelData.spawn.anna.x, levelData.spawn.anna.y
     );
     const annaSpawn = createEntity(annaSpawnCoords, "spawn", {character: "anna"});
-    entityMap.set(annaSpawnCoords.toString(), annaSpawn);
+    entityMap.set(coordsKey(annaSpawnCoords), annaSpawn);
 
-    const benSpawnCoords = new Coords(
+    const benSpawnCoords = createCoordinates(
         levelData.spawn.ben.x, levelData.spawn.ben.y
     );
     const benSpawn = createEntity(benSpawnCoords, "spawn", {character: "ben"});
-    entityMap.set(benSpawnCoords.toString(), benSpawn);
+    entityMap.set(coordsKey(benSpawnCoords), benSpawn);
 
     for (const e of levelData.entities) {
-        const coords = new Coords(e.coords.x, e.coords.y);
+        const coords = createCoordinates(e.coords.x, e.coords.y);
+        const key = coordsKey(coords);
         switch (e.typeName as Entity["typeName"]) {
             case "platform": {
                 const platform = createEntity(coords, "platform", {
                     orientation: (e as Entity<PlatformProperties>).orientation
                 });
-                entityMap.set(coords.toString(), platform);
+                entityMap.set(key, platform);
                 break;
             }
             case "pressure-button": {
@@ -116,7 +123,7 @@ export function convertToEntityMap(levelData: LevelData) {
                         colour: (e as Entity<PressureButtonProperties>).colour
                     }
                 );
-                entityMap.set(coords.toString(), button);
+                entityMap.set(key, button);
                 break;
             }
             case "switch": {
@@ -126,14 +133,14 @@ export function convertToEntityMap(levelData: LevelData) {
                         colour: (e as Entity<SwitchProperties>).colour
                     }
                 );
-                entityMap.set(coords.toString(), switchEntity);
+                entityMap.set(key, switchEntity);
                 break;
             }
             case "shard": {
                 const shard = createEntity(
                     coords, "shard", {character: (e as Entity<ShardProperties>).character}
                 );
-                entityMap.set(coords.toString(), shard);
+                entityMap.set(key, shard);
                 break;
             }
             default: {

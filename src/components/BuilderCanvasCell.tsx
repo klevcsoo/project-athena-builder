@@ -4,19 +4,18 @@ import {useWorldEntity} from "../hooks/useWorldEntity";
 import {PlatformWorldObject} from "./worldObject/PlatformWorldObject";
 import {cnx} from "../core/util";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
-import {Coords} from "../lib/Coords";
 import {SpawnWorldObject} from "./worldObject/SpawnWorldObject";
 import {ToolShell} from "./ToolShell";
 import {PressureButtonWorldObject} from "./worldObject/PressureButtonWorldObject";
 import {SwitchWorldObject} from "./worldObject/SwitchWorldObject";
 import {ShardWorldObject} from "./worldObject/ShardWorldObject";
-import {Entity} from "../lib/entity/Entity";
 import {PlatformProperties} from "../lib/entity/PlatformProperties";
 import {SpawnProperties} from "../lib/entity/SpawnProperties";
 import {PressureButtonProperties} from "../lib/entity/PressureButtonProperties";
 import {SwitchProperties} from "../lib/entity/SwitchProperties";
 import {ShardProperties} from "../lib/entity/ShardProperties";
-import {createEntity} from "../core/entity";
+import {createEntity, Entity} from "../core/entity";
+import {Coords, coordsEqual, createCoordinates} from "../core/coords";
 
 export function BuilderCanvasCell(props: {
     coords: Coords
@@ -25,7 +24,7 @@ export function BuilderCanvasCell(props: {
     const [selectedCoords, setSelectedCoords] = useSelectedEntityCoords();
     const [hovering, setHovering] = useState(false);
     const [entity, setEntity] = useWorldEntity(props.coords);
-    const [mouseInitPos, setMouseInitPos] = useState(new Coords(0, 0));
+    const [mouseInitPos, setMouseInitPos] = useState(createCoordinates(0, 0));
 
     const entityObject = useMemo<ReactNode>(() => {
         switch (entity?.typeName) {
@@ -60,7 +59,7 @@ export function BuilderCanvasCell(props: {
                 return;
             }
 
-            setSelectedCoords(new Coords(props.coords.x, props.coords.y));
+            setSelectedCoords(createCoordinates(props.coords.x, props.coords.y));
 
             switch (activeTool) {
                 case "platform": {
@@ -112,14 +111,14 @@ export function BuilderCanvasCell(props: {
             "relative", "w-full", "h-full",
             "border", "border-dashed", "border-white",
             "border-opacity-10",
-            selectedCoords.toString() === props.coords.toString() ?
+            coordsEqual(selectedCoords, props.coords) ?
                 "border-opacity-100" : ""
         )} onMouseEnter={() => {
             setHovering(true);
         }} onMouseLeave={() => {
             setHovering(false);
         }} onClick={useTool} onMouseDown={event => {
-            setMouseInitPos(new Coords(event.clientX, event.clientY));
+            setMouseInitPos(createCoordinates(event.clientX, event.clientY));
         }}>
             <p className={cnx(
                 "text-white", "text-sm", "text-opacity-10", "mx-1"

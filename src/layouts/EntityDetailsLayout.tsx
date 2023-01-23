@@ -1,11 +1,10 @@
 import {cnx} from "../core/util";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
 import {Fragment, useCallback, useEffect, useMemo, useState} from "react";
-import {Entity} from "../lib/entity/Entity";
 import {TextInput} from "../components/ui/TextInput";
 import {DropdownInput} from "../components/ui/DropdownInput";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
-import {destroyEntityAt, getEntityAt, updateEntityAt} from "../core/entity";
+import {destroyEntityAt, Entity, getEntityAt, updateEntityAt} from "../core/entity";
 import {BasicButton} from "../components/ui/BasicButton";
 import {CardinalDirection} from "../lib/CardinalDirection";
 import {ColourInput} from "../components/ui/ColourInput";

@@ -1,7 +1,7 @@
 import {MouseEventHandler, useCallback, useState} from "react";
 import {clamp, cnx} from "../core/util";
 import {BuilderCanvasCell} from "./BuilderCanvasCell";
-import {Coords} from "../lib/Coords";
+import {createCoordinates} from "../core/coords";
 
 export const CANVAS_VIRTUAL_WIDTH = 40 as const; // units
 export const CANVAS_VIRTUAL_HEIGHT = 20 as const; // units
@@ -58,7 +58,7 @@ export function BuilderCanvas() {
                     {[...new Array(CANVAS_VIRTUAL_WIDTH)].map((_, x) => (
                         <td width={CANVAS_UNIT_SIZE} height={CANVAS_UNIT_SIZE}
                             key={x}>
-                            <BuilderCanvasCell coords={new Coords(
+                            <BuilderCanvasCell coords={createCoordinates(
                                 x - CANVAS_VIRTUAL_WIDTH / 2,
                                 y - CANVAS_VIRTUAL_HEIGHT / 2
                             )}/>
