@@ -5,10 +5,12 @@ export type LevelData = {
         anna: {
             x: number
             y: number
+            z: number
         }
         ben: {
-            x: number,
+            x: number
             y: number
+            z: number
         }
     }
     entities: Entity[]

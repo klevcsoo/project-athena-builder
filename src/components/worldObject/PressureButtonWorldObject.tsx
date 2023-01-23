@@ -12,25 +12,18 @@ export function PressureButtonWorldObject(props: {
 
     return (
         <div className={"absolute inset-0"}>
+            <PlatformWorldObject/>
             <div className={cnx(
-                "absolute", "bottom-2", "left-1/2",
-                "w-3/4", "h-1/6",
-                "-translate-x-1/2",
+                "absolute", "inset-2",
                 "bg-white", "rounded-sm"
             )}></div>
             <div className={cnx(
-                "absolute", "bottom-1/3", "left-1/2",
-                "-translate-x-1/2",
-                "w-4/5", "h-[5%]",
+                "absolute", "inset-4",
                 "rounded-sm"
-            )} style={{backgroundColor: colourString}}></div>
-            <div className={cnx(
-                "absolute", "bottom-1/4", "left-1/2", "z-20",
-                "-translate-x-1/2",
-                "w-4/5", "h-[10%]",
-                "rounded-sm", "blur-lg", "animate-pulse"
-            )} style={{backgroundColor: colourString}}></div>
-            <PlatformWorldObject orientation={"south"}/>
+            )} style={{
+                backgroundColor: colourString,
+                boxShadow: `0 0 8px ${colourString}`
+            }}></div>
         </div>
     );
 }

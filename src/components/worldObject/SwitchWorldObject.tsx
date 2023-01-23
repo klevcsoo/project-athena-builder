@@ -12,27 +12,31 @@ export function SwitchWorldObject(props: {
 
     return (
         <div className={"absolute inset-0"}>
+            <PlatformWorldObject/>
             <div className={cnx(
-                "absolute", "bottom-2", "left-1/2",
-                "w-3/4", "h-1/6",
-                "-translate-x-1/2",
+                "absolute", "inset-2",
                 "bg-white", "rounded-sm"
             )}></div>
             <div className={cnx(
-                "absolute", "bottom-1/4", "left-1/2",
+                "absolute", "top-1/2", "left-1/2",
                 "-translate-x-1/2", "-translate-y-1/2",
                 "rotate-45",
                 "w-1/2", "h-[10%]",
                 "rounded-sm"
-            )} style={{backgroundColor: colourString}}></div>
+            )} style={{
+                backgroundColor: colourString,
+                boxShadow: `0 0 8px ${colourString}`
+            }}></div>
             <div className={cnx(
-                "absolute", "bottom-1/4", "left-1/2",
+                "absolute", "top-1/2", "left-1/2",
                 "-translate-x-1/2", "-translate-y-1/2",
-                "rotate-45",
+                "-rotate-45",
                 "w-1/2", "h-[10%]",
-                "rounded-sm", "blur-lg", "animate-pulse"
-            )} style={{backgroundColor: colourString}}></div>
-            <PlatformWorldObject orientation={"south"}/>
+                "rounded-sm"
+            )} style={{
+                backgroundColor: colourString,
+                boxShadow: `0 0 8px ${colourString}`
+            }}></div>
         </div>
     );
 }

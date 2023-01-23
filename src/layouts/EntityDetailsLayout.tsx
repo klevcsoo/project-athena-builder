@@ -6,9 +6,7 @@ import {DropdownInput} from "../components/ui/DropdownInput";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 import {destroyEntityAt, Entity, getEntityAt, updateEntityAt} from "../core/entity";
 import {BasicButton} from "../components/ui/BasicButton";
-import {CardinalDirection} from "../lib/types/CardinalDirection";
 import {ColourInput} from "../components/ui/ColourInput";
-import {PlatformProperties} from "../lib/types/entity/PlatformProperties";
 import {SpawnProperties} from "../lib/types/entity/SpawnProperties";
 import {PressureButtonProperties} from "../lib/types/entity/PressureButtonProperties";
 import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
@@ -40,12 +38,6 @@ export function EntityDetailsLayout() {
             <h2 className={"text-2xl"}>{entityTitle}</h2>
             <EntityNameEditor entity={entity}/>
             <EntityCoordinates entity={entity}/>
-            {entity.typeName === "platform" ? (
-                <Fragment>
-                    <PlatformOrientationEditor
-                        entity={entity as Entity<PlatformProperties>}/>
-                </Fragment>
-            ) : null}
             {entity.typeName === "spawn" ? (
                 <Fragment>
                     <SpawnPointCharacterEditor
@@ -92,7 +84,9 @@ function EntityNameEditor(props: {
 
     return (
         <TextInput text={name} onText={setName} onSubmit={() => {
-            updateEntityAt(props.entity.coords, {});
+            updateEntityAt(props.entity.coords, {
+                name: name
+            });
         }} placeholder={"Entity name"}/>
     );
 }
@@ -100,6 +94,14 @@ function EntityNameEditor(props: {
 function EntityCoordinates(props: {
     entity: Entity
 }) {
+    const [elevation, setElevation] = useState(props.entity.elevation);
+
+    useEffect(() => {
+        updateEntityAt(props.entity.coords, {
+            elevation: elevation
+        });
+    }, [elevation]);
+
     return (
         <div className={cnx(
             "h-12", "w-full", "px-4",
@@ -108,7 +110,8 @@ function EntityCoordinates(props: {
         )}>
             <MaterialSymbol name={"my_location"}/>
             <div className={cnx(
-                "flex", "flex-row", "gap-4", "items-center", "justify-end"
+                "flex", "flex-row", "gap-4", "items-center", "justify-end",
+                "text-xs"
             )}>
                 <div className={cnx(
                     "flex", "flex-row", "items-center", "justify-items-stretch"
@@ -118,7 +121,7 @@ function EntityCoordinates(props: {
                         "rounded-l-md"
                     )}></div>
                     <div className={cnx(
-                        "w-16", "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
+                        "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
                         "grid", "place-content-center"
                     )}><b className={"font-mono"}>{props.entity.coords.x}</b></div>
                 </div>
@@ -130,47 +133,45 @@ function EntityCoordinates(props: {
                         "rounded-l-md"
                     )}></div>
                     <div className={cnx(
-                        "w-16", "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
+                        "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
                         "grid", "place-content-center"
                     )}><b className={"font-mono"}>{props.entity.coords.y}</b></div>
                 </div>
+                <div className={cnx(
+                    "flex", "flex-row", "items-center", "justify-items-stretch"
+                )}>
+                    <div className={cnx(
+                        "w-2", "h-8", "bg-blue-600",
+                        "rounded-l-md"
+                    )}></div>
+                    <div className={cnx(
+                        "h-8", "px-4", "bg-neutral-800",
+                        "grid", "place-content-center"
+                    )}>
+                        <b className={"font-mono"}>{elevation}</b>
+                    </div>
+                    <div className={cnx(
+                        "w-4", "h-8", "flex", "flex-col", "items-center",
+                    )}>
+                        <button type={"button"} className={cnx(
+                            "w-4", "h-4",
+                            "bg-neutral-800", "rounded-tr-md",
+                            "hover:bg-neutral-700"
+                        )} onClick={() => {
+                            setElevation(prevState => prevState + 1);
+                        }}>+
+                        </button>
+                        <button type={"button"} className={cnx(
+                            "w-4", "h-4",
+                            "bg-neutral-800", "rounded-br-md",
+                            "hover:bg-neutral-700"
+                        )} onClick={() => {
+                            setElevation(prevState => prevState - 1);
+                        }}>-
+                        </button>
+                    </div>
+                </div>
             </div>
-        </div>
-    );
-}
-
-function PlatformOrientationEditor(props: {
-    entity: Entity<PlatformProperties>
-}) {
-    const options = useMemo<CardinalDirection[]>(() => {
-        return [
-            "north", "south", "west", "east"
-        ];
-    }, []);
-    const [selected, setSelected] = useState<string>(
-        props.entity.orientation
-    );
-
-    useEffect(() => {
-        setSelected(props.entity.orientation);
-    }, [props.entity]);
-
-    return (
-        <div className={cnx(
-            "h-12", "w-full", "px-4",
-            "flex", "flex-row", "gap-4", "items-center", "justify-between",
-            "bg-neutral-900", "rounded-md"
-        )}>
-            <MaterialSymbol name={"view_in_ar"}/>
-            <DropdownInput
-                options={options}
-                selected={selected}
-                onSelected={value => {
-                    setSelected(value);
-                    updateEntityAt<PlatformProperties>(props.entity.coords, {
-                        orientation: value as CardinalDirection
-                    });
-                }}/>
         </div>
     );
 }

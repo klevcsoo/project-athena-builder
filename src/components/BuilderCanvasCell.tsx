@@ -9,7 +9,6 @@ import {ToolShell} from "./ToolShell";
 import {PressureButtonWorldObject} from "./worldObject/PressureButtonWorldObject";
 import {SwitchWorldObject} from "./worldObject/SwitchWorldObject";
 import {ShardWorldObject} from "./worldObject/ShardWorldObject";
-import {PlatformProperties} from "../lib/types/entity/PlatformProperties";
 import {SpawnProperties} from "../lib/types/entity/SpawnProperties";
 import {PressureButtonProperties} from "../lib/types/entity/PressureButtonProperties";
 import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
@@ -29,9 +28,7 @@ export function BuilderCanvasCell(props: {
     const entityObject = useMemo<ReactNode>(() => {
         switch (entity?.typeName) {
             case "platform":
-                return <PlatformWorldObject orientation={
-                    (entity as Entity<PlatformProperties>).orientation
-                }/>;
+                return <PlatformWorldObject/>;
             case "spawn":
                 return <SpawnWorldObject character={
                     (entity as Entity<SpawnProperties>).character
@@ -55,7 +52,8 @@ export function BuilderCanvasCell(props: {
 
     const useTool = useCallback<MouseEventHandler<HTMLDivElement>>(
         (event) => {
-            if (mouseInitPos.x !== event.clientX || mouseInitPos.y !== event.clientY) {
+            if (mouseInitPos.x !== event.clientX ||
+                mouseInitPos.y !== event.clientY) {
                 return;
             }
 
@@ -64,21 +62,21 @@ export function BuilderCanvasCell(props: {
             switch (activeTool) {
                 case "platform": {
                     setEntity(createEntity(
-                        props.coords, "platform", {
+                        props.coords, "platform", 0, {
                             orientation: "south"
                         }));
                     break;
                 }
                 case "spawn": {
                     setEntity(createEntity(
-                        props.coords, "spawn", {
+                        props.coords, "spawn", 0, {
                             character: "anna"
                         }));
                     break;
                 }
                 case "pressure-button": {
                     setEntity(createEntity(
-                        props.coords, "pressure-button", {
+                        props.coords, "pressure-button", 0, {
                             colour: Math.floor(Math.random() * 0xffffff),
                             channel: crypto.randomUUID()
                         }));
@@ -86,7 +84,7 @@ export function BuilderCanvasCell(props: {
                 }
                 case "switch": {
                     setEntity(createEntity(
-                        props.coords, "switch", {
+                        props.coords, "switch", 0, {
                             colour: Math.floor(Math.random() * 0xffffff),
                             channel: crypto.randomUUID()
                         }));
@@ -94,7 +92,7 @@ export function BuilderCanvasCell(props: {
                 }
                 case "shard": {
                     setEntity(createEntity(
-                        props.coords, "shard", {
+                        props.coords, "shard", 0, {
                             character: "both"
                         }));
                     break;
@@ -123,8 +121,14 @@ export function BuilderCanvasCell(props: {
             <p className={cnx(
                 "text-white", "text-sm", "text-opacity-10", "mx-1"
             )}>{props.coords.x}; {props.coords.y}            </p>
-            {hovering ? (<ToolShell tool={activeTool}/>) : null}
             {entityObject}
+            <div className={cnx(
+                "absolute", "right-2", "top-1", "z-40",
+                "bg-black", "px-1", "rounded-sm",
+                "text-white", "text-sm",
+                "font-bold"
+            )}>{entity?.elevation}</div>
+            {hovering ? (<ToolShell tool={activeTool}/>) : null}
         </div>
     );
 }
