@@ -13,7 +13,7 @@ export function SwitchWorldObject(props: {
         <div className={"absolute inset-0"}>
             <div className={cnx(
                 "absolute", "inset-2",
-                "bg-white", "rounded-sm"
+                "bg-white", "rounded-full"
             )}></div>
             <div className={cnx(
                 "absolute", "top-1/2", "left-1/2",
