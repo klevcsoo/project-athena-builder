@@ -1,11 +1,10 @@
-export type ToolboxTool =
-    "pointer" | "platform" | "spawn" | "pressure-button" | "switch" | "shard"
-
-export const toolIconMap: { [key in ToolboxTool]: string } = {
+export const toolIconMap = {
     "pointer": "arrow_selector_tool",
-    "platform": "check_box_outline_blank",
+    "elevation": "altitude",
     "spawn": "person_pin_circle",
     "pressure-button": "space_bar",
     "switch": "switch",
     "shard": "diamond"
-};
+} as const;
+
+export type ToolboxTool = keyof typeof toolIconMap

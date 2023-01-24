@@ -117,13 +117,6 @@ export function convertToEntityMap(levelData: LevelData) {
         const coords = createCoordinates(e.coords.x, e.coords.y);
         const key = coordsKey(coords);
         switch (e.typeName as Entity["typeName"]) {
-            case "platform": {
-                const platform = createEntity(
-                    coords, "platform", e.elevation, {}
-                );
-                entityMap.set(key, platform);
-                break;
-            }
             case "pressure-button": {
                 const button = createEntity(
                     coords, "pressure-button", e.elevation, {

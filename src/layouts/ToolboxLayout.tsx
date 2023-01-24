@@ -13,8 +13,8 @@ export function ToolboxLayout() {
             "flex", "flex-col", "items-center", "gap-2"
         )}>
             <ToolboxButton tool={"pointer"}/>
+            <ToolboxButton tool={"elevation"}/>
             <ToolboxButton tool={"spawn"}/>
-            <ToolboxButton tool={"platform"}/>
             <ToolboxButton tool={"pressure-button"}/>
             <ToolboxButton tool={"switch"}/>
             <ToolboxButton tool={"shard"}/>

@@ -1,5 +1,4 @@
 import {cnx} from "../../core/util";
-import {PlatformWorldObject} from "./PlatformWorldObject";
 import {useMemo} from "react";
 import {PressureButtonProperties} from "../../lib/types/entity/PressureButtonProperties";
 
@@ -12,7 +11,6 @@ export function PressureButtonWorldObject(props: {
 
     return (
         <div className={"absolute inset-0"}>
-            <PlatformWorldObject/>
             <div className={cnx(
                 "absolute", "inset-2",
                 "bg-white", "rounded-sm"

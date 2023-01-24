@@ -1,5 +1,4 @@
 import {useMemo} from "react";
-import {PlatformWorldObject} from "./PlatformWorldObject";
 import {cnx} from "../../core/util";
 import {SwitchProperties} from "../../lib/types/entity/SwitchProperties";
 
@@ -12,7 +11,6 @@ export function SwitchWorldObject(props: {
 
     return (
         <div className={"absolute inset-0"}>
-            <PlatformWorldObject/>
             <div className={cnx(
                 "absolute", "inset-2",
                 "bg-white", "rounded-sm"

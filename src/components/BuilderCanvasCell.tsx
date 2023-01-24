@@ -1,7 +1,6 @@
 import {useActiveTool} from "../hooks/useActiveTool";
 import {MouseEventHandler, ReactNode, useCallback, useMemo, useState} from "react";
 import {useWorldEntity} from "../hooks/useWorldEntity";
-import {PlatformWorldObject} from "./worldObject/PlatformWorldObject";
 import {cnx} from "../core/util";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
 import {SpawnWorldObject} from "./worldObject/SpawnWorldObject";
@@ -15,20 +14,20 @@ import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
 import {ShardProperties} from "../lib/types/entity/ShardProperties";
 import {createEntity, Entity} from "../core/entity";
 import {Coords, coordsEqual, createCoordinates} from "../core/coords";
+import {useElevation} from "../hooks/useElevation";
 
 export function BuilderCanvasCell(props: {
     coords: Coords
 }) {
     const [activeTool] = useActiveTool();
     const [selectedCoords, setSelectedCoords] = useSelectedEntityCoords();
+    const [elevation, increaseElevation] = useElevation(props.coords);
     const [hovering, setHovering] = useState(false);
     const [entity, setEntity] = useWorldEntity(props.coords);
     const [mouseInitPos, setMouseInitPos] = useState(createCoordinates(0, 0));
 
     const entityObject = useMemo<ReactNode>(() => {
         switch (entity?.typeName) {
-            case "platform":
-                return <PlatformWorldObject/>;
             case "spawn":
                 return <SpawnWorldObject character={
                     (entity as Entity<SpawnProperties>).character
@@ -52,19 +51,18 @@ export function BuilderCanvasCell(props: {
 
     const useTool = useCallback<MouseEventHandler<HTMLDivElement>>(
         (event) => {
+            if (event.button === 2) event.preventDefault();
+
             if (mouseInitPos.x !== event.clientX ||
                 mouseInitPos.y !== event.clientY) {
                 return;
             }
 
-            setSelectedCoords(createCoordinates(props.coords.x, props.coords.y));
+            setSelectedCoords(props.coords);
 
             switch (activeTool) {
-                case "platform": {
-                    setEntity(createEntity(
-                        props.coords, "platform", 0, {
-                            orientation: "south"
-                        }));
+                case "elevation": {
+                    increaseElevation(event.button === 2 ? -1 : 1);
                     break;
                 }
                 case "spawn": {
@@ -115,19 +113,27 @@ export function BuilderCanvasCell(props: {
             setHovering(true);
         }} onMouseLeave={() => {
             setHovering(false);
-        }} onClick={useTool} onMouseDown={event => {
+        }} onClick={useTool} onContextMenu={useTool} onMouseDown={event => {
             setMouseInitPos(createCoordinates(event.clientX, event.clientY));
         }}>
             <p className={cnx(
                 "text-white", "text-sm", "text-opacity-10", "mx-1"
-            )}>{props.coords.x}; {props.coords.y}            </p>
+            )}>{props.coords.x}; {props.coords.y}</p>
+            {elevation === 0 ? null : (
+                <div className={cnx(
+                    "absolute", "inset-0",
+                    "bg-slate-800", "rounded-md"
+                )}></div>
+            )}
             {entityObject}
-            <div className={cnx(
-                "absolute", "right-2", "top-1", "z-30",
-                "bg-black", "px-1", "rounded-sm",
-                "text-white", "text-sm",
-                "font-bold"
-            )}>{entity?.elevation}</div>
+            {elevation === 0 ? null : (
+                <div className={cnx(
+                    "absolute", "right-2", "top-1", "z-30",
+                    "bg-black", "px-1", "rounded-sm",
+                    "text-white", "text-sm",
+                    "font-bold"
+                )}>{elevation}</div>
+            )}
             {hovering ? (<ToolShell tool={activeTool}/>) : null}
         </div>
     );

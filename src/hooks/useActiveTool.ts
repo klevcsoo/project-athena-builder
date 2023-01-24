@@ -10,7 +10,7 @@ const pubsub = new PubSubEventHandler<ToolboxTool>("pointer");
 (() => {
     const toolboxKeyMap: Map<string, ToolboxTool> = new Map([
         ["KeyV", "pointer"],
-        ["KeyP", "platform"],
+        ["KeyE", "elevation"],
         ["KeyS", "switch"],
         ["KeyB", "pressure-button"]
     ]);
