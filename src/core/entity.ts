@@ -22,9 +22,18 @@ export type Entity<
 
 export const entityMap = new PubSubMapEventHandler<string, Entity>();
 (window as any)["displayEntityMap"] = () => {
-    const entities: Entity[] = [];
-    for (const e of entityMap.values()) entities.push(e);
-    return entities;
+    const keys: string[] = [];
+    for (const k of entityMap.keys()) keys.push(k);
+
+    const values: Entity[] = [];
+    for (const v of entityMap.values()) values.push(v);
+
+    const map: { [key: string]: Entity } = {};
+    for (let i = 0; i < keys.length; i++) {
+        map[keys[i]] = values[i];
+    }
+
+    console.table(map);
 };
 
 export function createEntity<T extends keyof EntityTypeMap>(
