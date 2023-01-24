@@ -12,9 +12,11 @@ import {SpawnProperties} from "../lib/types/entity/SpawnProperties";
 import {PressureButtonProperties} from "../lib/types/entity/PressureButtonProperties";
 import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
 import {ShardProperties} from "../lib/types/entity/ShardProperties";
-import {createEntity, Entity} from "../core/entity";
+import {createEntity, Entity,} from "../core/entity";
 import {Coords, coordsEqual, createCoordinates} from "../core/coords";
 import {useElevation} from "../hooks/useElevation";
+import {DoorWorldObject} from "./worldObject/DoorWorldObject";
+import {DoorProperties} from "../lib/types/entity/DoorProperties";
 
 export function BuilderCanvasCell(props: {
     coords: Coords
@@ -43,6 +45,10 @@ export function BuilderCanvasCell(props: {
             case "shard":
                 return <ShardWorldObject character={
                     (entity as Entity<ShardProperties>).character
+                }/>;
+            case "door":
+                return <DoorWorldObject colour={
+                    (entity as Entity<DoorProperties>).colour
                 }/>;
             default:
                 return null;
@@ -93,6 +99,15 @@ export function BuilderCanvasCell(props: {
                         props.coords, "shard", {
                             character: "both"
                         }));
+                    break;
+                }
+                case "door": {
+                    setEntity(createEntity(
+                        props.coords, "door", {
+                            colour: Math.floor(Math.random() * 0xffffff),
+                            channel: crypto.randomUUID()
+                        }
+                    ));
                     break;
                 }
                 default: {

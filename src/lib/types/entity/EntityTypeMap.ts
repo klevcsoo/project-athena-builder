@@ -2,19 +2,12 @@ import {SpawnProperties} from "./SpawnProperties";
 import {PressureButtonProperties} from "./PressureButtonProperties";
 import {SwitchProperties} from "./SwitchProperties";
 import {ShardProperties} from "./ShardProperties";
+import {DoorProperties} from "./DoorProperties";
 
 export type EntityTypeMap = {
     ["spawn"]: SpawnProperties
     ["pressure-button"]: PressureButtonProperties
     ["switch"]: SwitchProperties
     ["shard"]: ShardProperties
+    ["door"]: DoorProperties
 }
-
-export const entityNameMap: {
-    [key in keyof EntityTypeMap]: key
-} = {
-    ["spawn"]: "spawn",
-    ["pressure-button"]: "pressure-button",
-    ["switch"]: "switch",
-    ["shard"]: "shard"
-};

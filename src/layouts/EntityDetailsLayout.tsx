@@ -66,6 +66,14 @@ export function EntityDetailsLayout() {
                         entity={entity as Entity<ShardProperties>}/>
                 </Fragment>
             ) : null}
+            {entity.typeName === "door" ? (
+                <Fragment>
+                    <CommsChannelEditor
+                        entity={entity as Entity<PressureButtonProperties>}/>
+                    <ColourEditor
+                        entity={entity as Entity<PressureButtonProperties>}/>
+                </Fragment>
+            ) : null}
             <DeleteEntityButton entity={entity} onDelete={() => {
                 setEntity(undefined);
             }}/>
