@@ -7,7 +7,7 @@ import {MaterialSymbol} from "../components/ui/MaterialSymbol";
 export function ToolboxLayout() {
     return (
         <div className={cnx(
-            "absolute", "inset-4", "z-30",
+            "absolute", "inset-4", "z-40",
             "w-16", "p-2",
             "bg-[#00000060]", "backdrop-blur-lg", "rounded-xl",
             "flex", "flex-col", "items-center", "gap-2"

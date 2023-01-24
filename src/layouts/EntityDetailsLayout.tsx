@@ -29,7 +29,7 @@ export function EntityDetailsLayout() {
 
     return !entity ? null : (
         <div className={cnx(
-            "absolute", "top-4", "bottom-4", "right-4", "z-30",
+            "absolute", "top-4", "bottom-4", "right-4", "z-40",
             "max-w-xs", "w-full", "p-4",
             "bg-[#00000060]", "backdrop-blur-lg", "rounded-xl",
             "flex", "flex-col", "items-center", "gap-4",

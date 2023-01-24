@@ -123,7 +123,7 @@ export function BuilderCanvasCell(props: {
             )}>{props.coords.x}; {props.coords.y}            </p>
             {entityObject}
             <div className={cnx(
-                "absolute", "right-2", "top-1", "z-40",
+                "absolute", "right-2", "top-1", "z-30",
                 "bg-black", "px-1", "rounded-sm",
                 "text-white", "text-sm",
                 "font-bold"
