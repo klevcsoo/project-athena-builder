@@ -94,12 +94,6 @@ function EntityNameEditor(props: {
 function EntityCoordinates(props: {
     entity: Entity
 }) {
-    const [elevation, setElevation] = useState(props.entity.elevation);
-
-    useEffect(() => {
-        setElevation(props.entity.elevation);
-    }, [props.entity]);
-
     return (
         <div className={cnx(
             "h-12", "w-full", "px-4",
@@ -119,7 +113,7 @@ function EntityCoordinates(props: {
                         "rounded-l-md"
                     )}></div>
                     <div className={cnx(
-                        "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
+                        "w-16", "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
                         "grid", "place-content-center"
                     )}><b className={"font-mono"}>{props.entity.coords.x}</b></div>
                 </div>
@@ -131,49 +125,9 @@ function EntityCoordinates(props: {
                         "rounded-l-md"
                     )}></div>
                     <div className={cnx(
-                        "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
+                        "w-16", "h-8", "px-4", "bg-neutral-800", "rounded-r-md",
                         "grid", "place-content-center"
                     )}><b className={"font-mono"}>{props.entity.coords.y}</b></div>
-                </div>
-                <div className={cnx(
-                    "flex", "flex-row", "items-center", "justify-items-stretch"
-                )}>
-                    <div className={cnx(
-                        "w-2", "h-8", "bg-blue-600",
-                        "rounded-l-md"
-                    )}></div>
-                    <div className={cnx(
-                        "h-8", "px-4", "bg-neutral-800",
-                        "grid", "place-content-center"
-                    )}>
-                        <b className={"font-mono"}>{elevation}</b>
-                    </div>
-                    <div className={cnx(
-                        "w-4", "h-8", "flex", "flex-col", "items-center",
-                    )}>
-                        <button type={"button"} className={cnx(
-                            "w-4", "h-4",
-                            "bg-neutral-800", "rounded-tr-md",
-                            "hover:bg-neutral-700"
-                        )} onClick={() => {
-                            updateEntityAt(props.entity.coords, {
-                                elevation: elevation + 1
-                            });
-                            setElevation(prevState => prevState + 1);
-                        }}>+
-                        </button>
-                        <button type={"button"} className={cnx(
-                            "w-4", "h-4",
-                            "bg-neutral-800", "rounded-br-md",
-                            "hover:bg-neutral-700"
-                        )} onClick={() => {
-                            updateEntityAt(props.entity.coords, {
-                                elevation: elevation - 1
-                            });
-                            setElevation(prevState => prevState - 1);
-                        }}>-
-                        </button>
-                    </div>
                 </div>
             </div>
         </div>

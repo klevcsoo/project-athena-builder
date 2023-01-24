@@ -67,14 +67,14 @@ export function BuilderCanvasCell(props: {
                 }
                 case "spawn": {
                     setEntity(createEntity(
-                        props.coords, "spawn", 0, {
+                        props.coords, "spawn", {
                             character: "anna"
                         }));
                     break;
                 }
                 case "pressure-button": {
                     setEntity(createEntity(
-                        props.coords, "pressure-button", 0, {
+                        props.coords, "pressure-button", {
                             colour: Math.floor(Math.random() * 0xffffff),
                             channel: crypto.randomUUID()
                         }));
@@ -82,7 +82,7 @@ export function BuilderCanvasCell(props: {
                 }
                 case "switch": {
                     setEntity(createEntity(
-                        props.coords, "switch", 0, {
+                        props.coords, "switch", {
                             colour: Math.floor(Math.random() * 0xffffff),
                             channel: crypto.randomUUID()
                         }));
@@ -90,7 +90,7 @@ export function BuilderCanvasCell(props: {
                 }
                 case "shard": {
                     setEntity(createEntity(
-                        props.coords, "shard", 0, {
+                        props.coords, "shard", {
                             character: "both"
                         }));
                     break;

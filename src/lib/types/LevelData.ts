@@ -5,13 +5,12 @@ export type LevelData = {
         anna: {
             x: number
             y: number
-            z: number
         }
         ben: {
             x: number
             y: number
-            z: number
         }
     }
     entities: Entity[]
+    elevationMap: { [x: number]: { [y: number]: number } }
 }

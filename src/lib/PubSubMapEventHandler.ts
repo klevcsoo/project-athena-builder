@@ -55,4 +55,8 @@ export class PubSubMapEventHandler<K, V> {
     public values() {
         return this.map.values();
     }
+
+    public keys() {
+        return this.map.keys();
+    }
 }

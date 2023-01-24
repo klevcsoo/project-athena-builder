@@ -6,8 +6,8 @@ export function useWorldEntity(coords: Coords): [
         Entity | undefined, (e: Entity) => void
 ] {
     const key = useMemo<string>(() => {
-        return coordsKey(coords)
-    }, [coords])
+        return coordsKey(coords);
+    }, [coords]);
 
     const [entity, setEntity] = useState<Entity | undefined>(
         entityMap.get(key)
