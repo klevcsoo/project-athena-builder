@@ -2,9 +2,7 @@ import {cnx} from "../../core/util";
 import {MaterialSymbol} from "../ui/MaterialSymbol";
 import {SpawnProperties} from "../../lib/types/entity/SpawnProperties";
 
-export function SpawnWorldObject(props: {
-    character: SpawnProperties["character"]
-}) {
+export function SpawnWorldObject(props: Omit<SpawnProperties, "typeName">) {
     return (
         <div className={cnx(
             "absolute", "inset-0",

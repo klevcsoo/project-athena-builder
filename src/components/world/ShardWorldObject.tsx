@@ -2,9 +2,7 @@ import {cnx} from "../../core/util";
 import {MaterialSymbol} from "../ui/MaterialSymbol";
 import {ShardProperties} from "../../lib/types/entity/ShardProperties";
 
-export function ShardWorldObject(props: {
-    character: ShardProperties["character"]
-}) {
+export function ShardWorldObject(props: Omit<ShardProperties, "typeName">) {
     return (
         <div className={"absolute inset-0"}>
             <MaterialSymbol name={"diamond"} className={cnx(

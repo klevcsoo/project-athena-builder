@@ -1,9 +1,8 @@
 import {cnx} from "../../core/util";
 import {colourString} from "../../core/colour";
+import {DoorProperties} from "../../lib/types/entity/DoorProperties";
 
-export function DoorWorldObject(props: {
-    colour: number
-}) {
+export function DoorWorldObject(props: Omit<DoorProperties, "typeName">) {
     return (
         <div className={cnx(
             "absolute", "inset-0"

@@ -2,9 +2,7 @@ import {cnx} from "../../core/util";
 import {SwitchProperties} from "../../lib/types/entity/SwitchProperties";
 import {colourString} from "../../core/colour";
 
-export function SwitchWorldObject(props: {
-    colour: SwitchProperties["colour"]
-}) {
+export function SwitchWorldObject(props: Omit<SwitchProperties, "typeName">) {
     return (
         <div className={"absolute inset-0"}>
             <div className={cnx(

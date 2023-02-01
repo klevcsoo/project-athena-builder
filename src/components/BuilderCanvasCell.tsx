@@ -3,20 +3,10 @@ import {MouseEventHandler, ReactNode, useCallback, useMemo, useState} from "reac
 import {useWorldEntity} from "../hooks/useWorldEntity";
 import {cnx} from "../core/util";
 import {useSelectedEntityCoords} from "../hooks/useSelectedEntityCoords";
-import {SpawnWorldObject} from "./worldObject/SpawnWorldObject";
 import {ToolShell} from "./ToolShell";
-import {PressureButtonWorldObject} from "./worldObject/PressureButtonWorldObject";
-import {SwitchWorldObject} from "./worldObject/SwitchWorldObject";
-import {ShardWorldObject} from "./worldObject/ShardWorldObject";
-import {SpawnProperties} from "../lib/types/entity/SpawnProperties";
-import {PressureButtonProperties} from "../lib/types/entity/PressureButtonProperties";
-import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
-import {ShardProperties} from "../lib/types/entity/ShardProperties";
-import {createEntity, Entity,} from "../core/entity";
+import {createEntity, entityWorldObjects,} from "../core/entity";
 import {Coords, coordsEqual, createCoordinates} from "../core/coords";
 import {useElevation} from "../hooks/useElevation";
-import {DoorWorldObject} from "./worldObject/DoorWorldObject";
-import {DoorProperties} from "../lib/types/entity/DoorProperties";
 import {randomColour} from "../core/colour";
 
 export function BuilderCanvasCell(props: {
@@ -25,35 +15,14 @@ export function BuilderCanvasCell(props: {
     const [activeTool] = useActiveTool();
     const [selectedCoords, setSelectedCoords] = useSelectedEntityCoords();
     const [elevation, increaseElevation] = useElevation(props.coords);
-    const [hovering, setHovering] = useState(false);
     const [entity, setEntity] = useWorldEntity(props.coords);
+
     const [mouseInitPos, setMouseInitPos] = useState(createCoordinates(0, 0));
+    const [hovering, setHovering] = useState(false);
 
     const entityObject = useMemo<ReactNode>(() => {
-        switch (entity?.typeName) {
-            case "spawn":
-                return <SpawnWorldObject character={
-                    (entity as Entity<SpawnProperties>).character
-                }/>;
-            case "pressure-button":
-                return <PressureButtonWorldObject colour={
-                    (entity as Entity<PressureButtonProperties>).colour
-                }/>;
-            case "switch":
-                return <SwitchWorldObject colour={
-                    (entity as Entity<SwitchProperties>).colour
-                }/>;
-            case "shard":
-                return <ShardWorldObject character={
-                    (entity as Entity<ShardProperties>).character
-                }/>;
-            case "door":
-                return <DoorWorldObject colour={
-                    (entity as Entity<DoorProperties>).colour
-                }/>;
-            default:
-                return null;
-        }
+        if (!!entity) return entityWorldObjects[entity.typeName](entity as any);
+        else return null;
     }, [entity]);
 
     const useTool = useCallback<MouseEventHandler<HTMLDivElement>>(

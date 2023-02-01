@@ -4,13 +4,14 @@ import {Fragment, useCallback, useEffect, useMemo, useState} from "react";
 import {TextInput} from "../components/ui/TextInput";
 import {DropdownInput} from "../components/ui/DropdownInput";
 import {MaterialSymbol} from "../components/ui/MaterialSymbol";
-import {destroyEntityAt, Entity, getEntityAt, updateEntityAt} from "../core/entity";
+import {Entity, entityMap, updateEntity} from "../core/entity";
 import {BasicButton} from "../components/ui/BasicButton";
 import {ColourInput} from "../components/ui/ColourInput";
 import {SpawnProperties} from "../lib/types/entity/SpawnProperties";
 import {PressureButtonProperties} from "../lib/types/entity/PressureButtonProperties";
 import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
 import {ShardProperties} from "../lib/types/entity/ShardProperties";
+import {coordsKey} from "../core/coords";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();
@@ -24,7 +25,7 @@ export function EntityDetailsLayout() {
     }, [entity]);
 
     useEffect(() => {
-        setEntity(getEntityAt(coords));
+        setEntity(entityMap.get(coordsKey(coords)));
     }, [coords]);
 
     return !entity ? null : (
@@ -92,7 +93,7 @@ function EntityNameEditor(props: {
 
     return (
         <TextInput text={name} onText={setName} onSubmit={() => {
-            updateEntityAt(props.entity.coords, {
+            updateEntity(props.entity.coords, {
                 name: name
             });
         }} placeholder={"Entity name"}/>
@@ -168,7 +169,7 @@ function SpawnPointCharacterEditor(props: {
                 selected={selected}
                 onSelected={value => {
                     setSelected(value as any);
-                    updateEntityAt<SpawnProperties>(props.entity.coords, {
+                    updateEntity<SpawnProperties>(props.entity.coords, {
                         character: value as any
                     });
                 }}/>
@@ -181,7 +182,7 @@ function DeleteEntityButton(props: {
     onDelete(): void
 }) {
     const doDelete = useCallback(() => {
-        destroyEntityAt(props.entity.coords);
+        entityMap.delete(coordsKey(props.entity.coords));
         props.onDelete();
     }, [props]);
 
@@ -210,7 +211,7 @@ function CommsChannelEditor(props: {
                        placeholder={"Communication channel"}
                        className={"h-8 text-end"}
                        onSubmit={() => {
-                           updateEntityAt<
+                           updateEntity<
                                PressureButtonProperties | SwitchProperties
                            >(props.entity.coords, {
                                channel: channel
@@ -237,7 +238,7 @@ function ColourEditor(props: {
         )}>
             <MaterialSymbol name={"format_color_fill"}/>
             <ColourInput colour={colour} onColour={colour1 => {
-                updateEntityAt<
+                updateEntity<
                     PressureButtonProperties | SwitchProperties
                 >(props.entity.coords, {
                     colour: colour1
@@ -274,7 +275,7 @@ function ShardCharacterEditor(props: {
                 selected={selected}
                 onSelected={value => {
                     setSelected(value as any);
-                    updateEntityAt<ShardProperties>(props.entity.coords, {
+                    updateEntity<ShardProperties>(props.entity.coords, {
                         character: value as any
                     });
                 }}/>

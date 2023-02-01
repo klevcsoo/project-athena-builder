@@ -2,9 +2,7 @@ import {cnx} from "../../core/util";
 import {PressureButtonProperties} from "../../lib/types/entity/PressureButtonProperties";
 import {colourString} from "../../core/colour";
 
-export function PressureButtonWorldObject(props: {
-    colour: PressureButtonProperties["colour"]
-}) {
+export function PressureButtonWorldObject(props: Omit<PressureButtonProperties, "typeName">) {
     return (
         <div className={"absolute inset-0"}>
             <div className={cnx(

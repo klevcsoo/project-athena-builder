@@ -9,6 +9,12 @@ import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
 import {ShardProperties} from "../lib/types/entity/ShardProperties";
 import {EmptyEntityProperties} from "../lib/types/entity/EmptyEntityProperties";
 import {Coords, coordsKey, coordsString, createCoordinates, elevationMap} from "./coords";
+import {FunctionComponent} from "react";
+import {DoorWorldObject} from "../components/world/DoorWorldObject";
+import {SwitchWorldObject} from "../components/world/SwitchWorldObject";
+import {ShardWorldObject} from "../components/world/ShardWorldObject";
+import {SpawnWorldObject} from "../components/world/SpawnWorldObject";
+import {PressureButtonWorldObject} from "../components/world/PressureButtonWorldObject";
 
 // lol
 type BaseEntityMap = { empty: EmptyEntityProperties } & EntityTypeMap
@@ -47,11 +53,7 @@ export function createEntity<T extends keyof EntityTypeMap>(
     };
 }
 
-export function getEntityAt(c: Coords): Entity | undefined {
-    return entityMap.get(coordsKey(c));
-}
-
-export function updateEntityAt<
+export function updateEntity<
     T extends EntityTypeMap[keyof EntityTypeMap]
 >(c: Coords, properties: Partial<Omit<Entity<T>, "typeName">>) {
     const key = coordsKey(c);
@@ -61,10 +63,6 @@ export function updateEntityAt<
             ...properties
         });
     }
-}
-
-export function destroyEntityAt(c: Coords) {
-    entityMap.delete(coordsKey(c));
 }
 
 export function checkEntityMapValidity(): EntityMapValidityResult {
@@ -210,3 +208,15 @@ export function convertToEntityMap(levelData: LevelData) {
         }
     }
 }
+
+export const entityWorldObjects: {
+    [key in keyof EntityTypeMap]: FunctionComponent<
+        Omit<EntityTypeMap[key], "typeName">
+    >
+} = {
+    door: DoorWorldObject,
+    switch: SwitchWorldObject,
+    shard: ShardWorldObject,
+    spawn: SpawnWorldObject,
+    "pressure-button": PressureButtonWorldObject
+};
