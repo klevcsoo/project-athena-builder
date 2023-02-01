@@ -1,13 +1,13 @@
+import {colourString, createColour} from "../../core/colour";
+
 export function ColourInput(props: {
     colour: number
     onColour(colour: number): void
 }) {
     return (
-        <input type="color" value={"#" + props.colour.toString(16)}
+        <input type="color" value={colourString(props.colour)}
                onChange={event => {
-                   props.onColour(parseInt(
-                       event.currentTarget.value.replace("#", ""), 16
-                   ));
+                   props.onColour(createColour(event.currentTarget.value));
                }}
         />
     );

@@ -17,6 +17,7 @@ import {Coords, coordsEqual, createCoordinates} from "../core/coords";
 import {useElevation} from "../hooks/useElevation";
 import {DoorWorldObject} from "./worldObject/DoorWorldObject";
 import {DoorProperties} from "../lib/types/entity/DoorProperties";
+import {randomColour} from "../core/colour";
 
 export function BuilderCanvasCell(props: {
     coords: Coords
@@ -67,6 +68,8 @@ export function BuilderCanvasCell(props: {
             setSelectedCoords(props.coords);
 
             switch (activeTool) {
+                case "pointer":
+                    break;
                 case "elevation": {
                     increaseElevation(event.button === 2 ? -1 : 1);
                     break;
@@ -81,7 +84,7 @@ export function BuilderCanvasCell(props: {
                 case "pressure-button": {
                     setEntity(createEntity(
                         props.coords, "pressure-button", {
-                            colour: Math.floor(Math.random() * 0xffffff),
+                            colour: randomColour(),
                             channel: crypto.randomUUID()
                         }));
                     break;
@@ -89,7 +92,7 @@ export function BuilderCanvasCell(props: {
                 case "switch": {
                     setEntity(createEntity(
                         props.coords, "switch", {
-                            colour: Math.floor(Math.random() * 0xffffff),
+                            colour: randomColour(),
                             channel: crypto.randomUUID()
                         }));
                     break;
@@ -104,7 +107,7 @@ export function BuilderCanvasCell(props: {
                 case "door": {
                     setEntity(createEntity(
                         props.coords, "door", {
-                            colour: Math.floor(Math.random() * 0xffffff),
+                            colour: randomColour(),
                             channel: crypto.randomUUID()
                         }
                     ));

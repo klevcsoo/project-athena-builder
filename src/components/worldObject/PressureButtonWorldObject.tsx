@@ -1,14 +1,10 @@
 import {cnx} from "../../core/util";
-import {useMemo} from "react";
 import {PressureButtonProperties} from "../../lib/types/entity/PressureButtonProperties";
+import {colourString} from "../../core/colour";
 
 export function PressureButtonWorldObject(props: {
     colour: PressureButtonProperties["colour"]
 }) {
-    const colourString = useMemo<string>(() => {
-        return "#" + props.colour.toString(16);
-    }, [props.colour]);
-
     return (
         <div className={"absolute inset-0"}>
             <div className={cnx(
@@ -19,8 +15,8 @@ export function PressureButtonWorldObject(props: {
                 "absolute", "inset-4",
                 "rounded-sm"
             )} style={{
-                backgroundColor: colourString,
-                boxShadow: `0 0 8px ${colourString}`
+                backgroundColor: colourString(props.colour),
+                boxShadow: `0 0 8px ${colourString(props.colour)}`
             }}></div>
         </div>
     );

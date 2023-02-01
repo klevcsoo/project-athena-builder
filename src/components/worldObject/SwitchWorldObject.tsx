@@ -1,14 +1,10 @@
-import {useMemo} from "react";
 import {cnx} from "../../core/util";
 import {SwitchProperties} from "../../lib/types/entity/SwitchProperties";
+import {colourString} from "../../core/colour";
 
 export function SwitchWorldObject(props: {
     colour: SwitchProperties["colour"]
 }) {
-    const colourString = useMemo<string>(() => {
-        return "#" + props.colour.toString(16);
-    }, [props.colour]);
-
     return (
         <div className={"absolute inset-0"}>
             <div className={cnx(
@@ -22,8 +18,8 @@ export function SwitchWorldObject(props: {
                 "w-1/2", "h-[10%]",
                 "rounded-sm"
             )} style={{
-                backgroundColor: colourString,
-                boxShadow: `0 0 8px ${colourString}`
+                backgroundColor: colourString(props.colour),
+                boxShadow: `0 0 8px ${colourString(props.colour)}`
             }}></div>
             <div className={cnx(
                 "absolute", "top-1/2", "left-1/2",
@@ -32,8 +28,8 @@ export function SwitchWorldObject(props: {
                 "w-1/2", "h-[10%]",
                 "rounded-sm"
             )} style={{
-                backgroundColor: colourString,
-                boxShadow: `0 0 8px ${colourString}`
+                backgroundColor: colourString(props.colour),
+                boxShadow: `0 0 8px ${colourString(props.colour)}`
             }}></div>
         </div>
     );

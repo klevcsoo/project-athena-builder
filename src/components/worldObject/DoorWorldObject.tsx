@@ -1,13 +1,9 @@
 import {cnx} from "../../core/util";
-import {useMemo} from "react";
+import {colourString} from "../../core/colour";
 
 export function DoorWorldObject(props: {
     colour: number
 }) {
-    const colourString = useMemo<string>(() => {
-        return "#" + props.colour.toString(16);
-    }, [props.colour]);
-
     return (
         <div className={cnx(
             "absolute", "inset-0"
@@ -30,8 +26,8 @@ export function DoorWorldObject(props: {
                 "h-2", "border-2", "border-white",
                 "rounded-r-md", "rounded-tl-md"
             )} style={{
-                backgroundColor: colourString,
-                boxShadow: `0 0 8px ${colourString}`
+                backgroundColor: colourString(props.colour),
+                boxShadow: `0 0 8px ${colourString(props.colour)}`
             }}></div>
         </div>
     );
