@@ -12,6 +12,7 @@ import {PressureButtonProperties} from "../lib/types/entity/PressureButtonProper
 import {SwitchProperties} from "../lib/types/entity/SwitchProperties";
 import {ShardProperties} from "../lib/types/entity/ShardProperties";
 import {coordsKey} from "../core/coords";
+import {LevelFinishProperties} from "../lib/types/entity/LevelFinishProperties";
 
 export function EntityDetailsLayout() {
     const [coords] = useSelectedEntityCoords();
@@ -63,7 +64,7 @@ export function EntityDetailsLayout() {
             ) : null}
             {entity.typeName === "shard" ? (
                 <Fragment>
-                    <ShardCharacterEditor
+                    <CharacterExtendedEditor
                         entity={entity as Entity<ShardProperties>}/>
                 </Fragment>
             ) : null}
@@ -73,6 +74,12 @@ export function EntityDetailsLayout() {
                         entity={entity as Entity<PressureButtonProperties>}/>
                     <ColourEditor
                         entity={entity as Entity<PressureButtonProperties>}/>
+                </Fragment>
+            ) : null}
+            {entity.typeName === "level-finish" ? (
+                <Fragment>
+                    <CharacterExtendedEditor
+                        entity={entity as Entity<LevelFinishProperties>}/>
                 </Fragment>
             ) : null}
             <DeleteEntityButton entity={entity} onDelete={() => {
@@ -249,15 +256,15 @@ function ColourEditor(props: {
     );
 }
 
-function ShardCharacterEditor(props: {
-    entity: Entity<ShardProperties>
+function CharacterExtendedEditor(props: {
+    entity: Entity<ShardProperties | LevelFinishProperties>
 }) {
     const options = useMemo<["anna", "ben", "both"]>(() => {
         return ["anna", "ben", "both"];
     }, []);
-    const [selected, setSelected] = useState<ShardProperties["character"]>(
-        props.entity.character
-    );
+    const [selected, setSelected] = useState<
+        (ShardProperties | LevelFinishProperties)["character"]
+    >(props.entity.character);
 
     useEffect(() => {
         setSelected(props.entity.character);
@@ -275,9 +282,11 @@ function ShardCharacterEditor(props: {
                 selected={selected}
                 onSelected={value => {
                     setSelected(value as any);
-                    updateEntity<ShardProperties>(props.entity.coords, {
-                        character: value as any
-                    });
+                    updateEntity<ShardProperties | LevelFinishProperties>(
+                        props.entity.coords, {
+                            character: value as any
+                        }
+                    );
                 }}/>
         </div>
     );

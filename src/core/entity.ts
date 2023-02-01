@@ -15,6 +15,8 @@ import {SwitchWorldObject} from "../components/world/SwitchWorldObject";
 import {ShardWorldObject} from "../components/world/ShardWorldObject";
 import {SpawnWorldObject} from "../components/world/SpawnWorldObject";
 import {PressureButtonWorldObject} from "../components/world/PressureButtonWorldObject";
+import {LevelFinishWorldObject} from "../components/world/LevelFinishWorldObject";
+import {LevelFinishProperties} from "../lib/types/entity/LevelFinishProperties";
 
 // lol
 type BaseEntityMap = { empty: EmptyEntityProperties } & EntityTypeMap
@@ -69,6 +71,11 @@ export function checkEntityMapValidity(): EntityMapValidityResult {
     let spawnPointCount = 0;
     let annaSpawnExists = false;
     let benSpawnExists = false;
+
+    let commonFinishGates = 0
+    let annaFinishGates = 0
+    let benFinishGates = 0
+
     for (const entity of entityMap.values()) {
         if (entity.typeName === "spawn") {
             spawnPointCount++;
@@ -77,6 +84,11 @@ export function checkEntityMapValidity(): EntityMapValidityResult {
             } else if ((entity as Entity<SpawnProperties>).character === "ben") {
                 benSpawnExists = true;
             }
+        } else if (entity.typeName === "level-finish") {
+            const c = (entity as Entity<LevelFinishProperties>).character
+            if (c === "anna") annaFinishGates++
+            else if (c === "ben") benFinishGates++
+            else if (c === "both") commonFinishGates++
         }
     }
 
@@ -86,9 +98,17 @@ export function checkEntityMapValidity(): EntityMapValidityResult {
         return "spawn-points.missing-anna";
     } else if (!benSpawnExists) {
         return "spawn-points.missing-ben";
-    } else {
-        return "ok";
     }
+
+    if (!commonFinishGates) {
+        if (!annaFinishGates) {
+            return "finish-gates.missing-anna"
+        } else if (!benSpawnExists) {
+            return "finish-gates.missing-ben"
+        }
+    }
+
+    return "ok"
 }
 
 export function convertToLevelData(): LevelData {
@@ -218,5 +238,6 @@ export const entityWorldObjects: {
     switch: SwitchWorldObject,
     shard: ShardWorldObject,
     spawn: SpawnWorldObject,
-    "pressure-button": PressureButtonWorldObject
+    "pressure-button": PressureButtonWorldObject,
+    "level-finish": LevelFinishWorldObject
 };

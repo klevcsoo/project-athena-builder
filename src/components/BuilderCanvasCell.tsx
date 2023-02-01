@@ -82,6 +82,14 @@ export function BuilderCanvasCell(props: {
                     ));
                     break;
                 }
+                case "level-finish": {
+                    setEntity(createEntity(
+                        props.coords, "level-finish", {
+                            character: "both"
+                        }
+                    ));
+                    break;
+                }
                 default: {
                     break;
                 }

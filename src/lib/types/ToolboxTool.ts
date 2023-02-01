@@ -5,7 +5,8 @@ export const toolIconMap = {
     "pressure-button": "space_bar",
     "switch": "switch",
     "shard": "diamond",
-    "door": "door_open"
+    "door": "door_open",
+    "level-finish": "flag"
 } as const;
 
 export type ToolboxTool = keyof typeof toolIconMap
